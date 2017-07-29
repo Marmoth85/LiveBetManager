@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>BetTracker</class>
+ <widget class="QWidget" name="BetTracker">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -91,11 +91,32 @@
       </font>
      </property>
      <property name="text">
-      <string>Attentes de paris</string>
+      <string>Objectifs de paris</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QTreeWidget" name="treeEvents">
+     <column>
+      <property name="text">
+       <string notr="true">1</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QListWidget" name="listGoals"/>
+   </item>
+   <item row="2" column="2">
+    <widget class="QTreeWidget" name="treeBets">
+     <column>
+      <property name="text">
+       <string notr="true">1</string>
+      </property>
+     </column>
     </widget>
    </item>
   </layout>
