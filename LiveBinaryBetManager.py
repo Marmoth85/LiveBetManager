@@ -1,9 +1,9 @@
 from PyQt5 import QtGui, QtWidgets
 import sys
 
-from gen_files import qmainwindow
+from gen_files import welcomeview
 
-class LiveBinaryBetManager(QtWidgets.QMainWindow, qmainwindow.Ui_MainWindow):
+class LiveBinaryBetManager(QtWidgets.QMainWindow, welcomeview.Ui_WelcomeView):
 
 	def __init__(self, parent=None):
 		super(LiveBinaryBetManager, self).__init__(parent)

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WelcomeView</class>
+ <widget class="QMainWindow" name="WelcomeView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1200</width>
+    <height>800</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1200</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuGestion_Paris">
+    <property name="title">
+     <string>Gestion des Paris</string>
+    </property>
+    <addaction name="actionNouveau_Paris"/>
+    <addaction name="actionAfficher_Evenements_en_cours"/>
+    <addaction name="separator"/>
+    <addaction name="actionCreer_un_nouveau_paris"/>
+    <addaction name="actionFermer_tous_les_paris_et_matches"/>
+    <addaction name="separator"/>
+    <addaction name="actionExporter_Donnees_Vers_Excel"/>
+    <addaction name="actionImporter_Donnees_depuis_Excel"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuitter"/>
+   </widget>
+   <widget class="QMenu" name="menuGraphiques">
+    <property name="title">
+     <string>Graphiques</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuValidation_Empirique">
+    <property name="title">
+     <string>Validation Empirique</string>
+    </property>
+   </widget>
+   <addaction name="menuGestion_Paris"/>
+   <addaction name="menuGraphiques"/>
+   <addaction name="menuValidation_Empirique"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionNouveau_Paris">
+   <property name="text">
+    <string>Créer Evènement Sportif</string>
+   </property>
+  </action>
+  <action name="actionAfficher_Evenements_en_cours">
+   <property name="text">
+    <string>Afficher évènements en cours</string>
+   </property>
+  </action>
+  <action name="actionCreer_un_nouveau_paris">
+   <property name="text">
+    <string>Créer un nouveau paris</string>
+   </property>
+  </action>
+  <action name="actionFermer_tous_les_paris_et_matches">
+   <property name="text">
+    <string>Fermer tous les paris et matches</string>
+   </property>
+  </action>
+  <action name="actionExporter_Donnees_Vers_Excel">
+   <property name="text">
+    <string>Exporter Données vers Excel</string>
+   </property>
+  </action>
+  <action name="actionImporter_Donnees_depuis_Excel">
+   <property name="text">
+    <string>Importer Données depuis Excel</string>
+   </property>
+  </action>
+  <action name="actionQuitter">
+   <property name="text">
+    <string>Quitter</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
