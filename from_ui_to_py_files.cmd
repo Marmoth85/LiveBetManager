@@ -1,1 +1,0 @@
-pyuic5 ui_files/qmainwindow.ui -o gen_files/qmainwindow.py
