@@ -28,7 +28,7 @@
      <string>Gestion des Paris</string>
     </property>
     <addaction name="actionNouveau_Paris"/>
-    <addaction name="actionAfficher_Evenements_en_cours"/>
+    <addaction name="actionShowEvents"/>
     <addaction name="separator"/>
     <addaction name="actionCreer_un_nouveau_paris"/>
     <addaction name="actionFermer_tous_les_paris_et_matches"/>
@@ -58,7 +58,7 @@
     <string>Créer Evènement Sportif</string>
    </property>
   </action>
-  <action name="actionAfficher_Evenements_en_cours">
+  <action name="actionShowEvents">
    <property name="text">
     <string>Afficher évènements en cours</string>
    </property>
@@ -90,5 +90,26 @@
   </action>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>menubar</sender>
+   <signal>triggered(QAction*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>proceedAction(QAction*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>385</x>
+     <y>10</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>257</x>
+     <y>158</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>showText()</slot>
+  <slot>proceedAction(QAction*)</slot>
+ </slots>
 </ui>
