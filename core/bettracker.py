@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QWidget
 
 from gen_files import ui_bettracker
 
