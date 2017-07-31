@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1200</width>
-    <height>800</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1200</width>
+     <width>800</width>
      <height>21</height>
     </rect>
    </property>
@@ -48,9 +48,16 @@
      <string>Validation Empirique</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuCalculateur_Dice_Roll">
+    <property name="title">
+     <string>Calculateur Dice/Roll</string>
+    </property>
+    <addaction name="actionOuvrir_Feuille_de_calcul"/>
+   </widget>
    <addaction name="menuGestion_Paris"/>
    <addaction name="menuGraphiques"/>
    <addaction name="menuValidation_Empirique"/>
+   <addaction name="menuCalculateur_Dice_Roll"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNouveau_Paris">
@@ -88,6 +95,11 @@
     <string>Quitter</string>
    </property>
   </action>
+  <action name="actionOuvrir_Feuille_de_calcul">
+   <property name="text">
+    <string>Ouvrir Feuille de calcul</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>
@@ -95,21 +107,20 @@
    <sender>menubar</sender>
    <signal>triggered(QAction*)</signal>
    <receiver>MainWindow</receiver>
-   <slot>proceedAction(QAction*)</slot>
+   <slot>proceed_action(QAction*)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>385</x>
      <y>10</y>
     </hint>
     <hint type="destinationlabel">
-     <x>257</x>
-     <y>158</y>
+     <x>306</x>
+     <y>221</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
-  <slot>showText()</slot>
-  <slot>proceedAction(QAction*)</slot>
+  <slot>proceed_action(QAction*)</slot>
  </slots>
 </ui>
