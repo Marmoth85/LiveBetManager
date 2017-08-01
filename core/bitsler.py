@@ -6,9 +6,25 @@ from gen_files import ui_bitsler
 
 class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
     def __init__(self, parent=None):
-
         super(Bitsler, self).__init__(parent)
         self.setupUi(self)
+
+        # Paramètres d'entrée au départ du pari
+        self.cash = 0
+        self.bet = 0
+        self.proba_win = 0
+        self.payout = 0
+        self.black_risk = 0
+        # Résultats et paramètres théoriques à calculer
+        self.goal_black_risk = 0
+        self.goal_lost_bet = 0
+        self.goal_cash = 0
+        self.goal_multiply = 0
+        # Résultats et paramètres pratiques à utiliser en raison de la limitation due à la trésorerie actuelle
+        self.practical_black_risk = 0
+        self.practical_lost_bet = 0
+        self.practical_cash = 0
+        self.practical_multiply = 0
 
     """
     estimate <- function (cash=0.00000300, bet=0.00000001, proba_win=0.475, payout=10){
@@ -62,17 +78,6 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
       return(list(Pmc_cash=Pmc_cash, n_poss=n_poss, a_new=a_new))
     }
     
-    PMCCASH <- rep(0,94)
-    NPOSS <- rep(0,94)
-    ANEW <- rep(0,94)
-    
-    for(i in 1:94){
-      res <- estimate(cash = 0.00000391, bet = 0.00000001, proba_win = i/100);
-      PMCCASH[i] <- res$Pmc_cash
-      NPOSS[i] <- res$n_poss
-      ANEW[i] <- res$a_new
-    }
-    
     bankrupcy <- function(proba_win=0.5, times=10, games=100, nsim=1000){
       r <- 10000;
       x <- matrix(sample(c(0,1), games*nsim, prob=c(proba_win, 1-proba_win), replace=TRUE), nrow=games, ncol=nsim, byrow = FALSE);
@@ -93,14 +98,73 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
     l <- bankrupcy(proba_win = 0.099, times=m$n_poss, games=500, nsim=100000)
     length(which(l>=m$n_poss))/length(l)
     """
-    @pyqtSlot()
-    def update_calculation(self):
-        pass
+
+    def load_input_data(self):
+        # Paramètres d'entrée au départ du pari
+        self.cash = self.doubleSpinBox_Cash.value()
+        self.bet = self.doubleSpinBox_Bet.value()
+        self.proba_win = self.doubleSpinBox_Proba.value()
+        self.payout = self.doubleSpinBox_Payout.value()
+        self.black_risk = self.spinBoxBlackRisk.value()
+
+    def update_results(self):
+        # Goals
+        self.labelOutputBlackRiskGoal.setText(str(self.goal_black_risk))
+        self.labelOutputLostBetGoal.setText(str(self.goal_lost_bet))
+        self.labelOutputCashGoal.setText(str(self.goal_cash))
+        self.labelOutputMultiplyGoal.setText(str(self.goal_multiply))
+
+        # Practically
+        self.labelOutputPracticalRisk.setText(str(self.practical_black_risk))
+        self.labelOutputPracticalLostBet.setText(str(self.practical_lost_bet))
+        self.labelOutputPracticalCash.setText(str(self.practical_cash))
+        self.labelOutputPracticalMultiply.setText(str(self.practical_multiply))
+
+    def compute_parameters(self):
+        self.load_input_data()
+
+        """
+        main function will be here
+        """
+
+        self.update_results()
 
     @pyqtSlot()
-    def calculate_bankruptcy(self):
-        pass
+    def update_cash(self):
+        self.cash = self.sender().text().replace(",", ".")
+        print(self.cash)
+        self.compute_parameters()
+
+    @pyqtSlot()
+    def update_bet(self):
+        self.bet = self.sender().text().replace(",", ".")
+        print(self.bet)
+        self.compute_parameters()
+
+    @pyqtSlot()
+    def update_proba(self):
+        self.proba_win = self.sender().text().replace(",", ".")
+        print(self.proba_win)
+        self.compute_parameters()
+
+    @pyqtSlot()
+    def update_payout(self):
+        self.payout = self.sender().text().replace(",", ".")
+        print(self.payout)
+        self.compute_parameters()
+
+    @pyqtSlot()
+    def update_risk(self):
+        self.black_risk = self.sender().text().replace(",", ".")
+        print(self.black_risk)
+        self.compute_parameters()
+
+    @pyqtSlot()
+    def compute_bankruptcy(self):
+        result = 0.012356
+
+        self.labelOutputBankruptcyRisk.setText(str(round(result * 100, 2)) + " %")
 
     @pyqtSlot()
     def update_bankruptcy_display(self):
-        pass
+        self.labelOutputBankruptcyRisk.setText("-- Mettre à jour --")

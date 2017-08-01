@@ -30,9 +30,9 @@ class MainWindow(QMainWindow, ui_mainwindow.Ui_MainWindow):
         self.setCentralWidget(self.my_bet_tracker)
 
     def save_current_work(self):
-        QMessageBox.question(self, "Save Current Work",
+        """QMessageBox.question(self, "Save Current Work",
                              "Message : La fonctionnalité est prévue mais n'a pas encore implémentée!",
-                             QMessageBox.Ok, QMessageBox.Ok)
+                             QMessageBox.Ok, QMessageBox.Ok)"""
         pass
 
     def show_bitsler_spreadsheet(self):
