@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QMainWindow, QMessageBox, QAction
 from PyQt5.QtCore import pyqtSlot
 
 from gen_files import ui_mainwindow
-from . import bettracker
+from . import bettracker, bitsler
 
 
 class MainWindow(QMainWindow, ui_mainwindow.Ui_MainWindow):
@@ -36,8 +36,5 @@ class MainWindow(QMainWindow, ui_mainwindow.Ui_MainWindow):
         pass
 
     def show_bitsler_spreadsheet(self):
-        QMessageBox.question(self, "Show Bitsler Spreadsheet",
-                             "Message : Le choix du menu a bien été cliqué, "
-                             "mais la fonction n'est pas encore implémentée!",
-                             QMessageBox.Ok, QMessageBox.Ok)
-        pass
+        self.my_bitsler_spreadsheet = bitsler.Bitsler(self)
+        self.setCentralWidget(self.my_bitsler_spreadsheet)
