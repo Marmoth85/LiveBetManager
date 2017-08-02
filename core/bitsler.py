@@ -120,10 +120,24 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
     
     @pyqtSlot()
     def compute_bankruptcy(self):
-        result = 0.012356
-        
-        self.labelOutputBankruptcyRisk.setText(
-            str("%.2f" % (result * 100)).replace(".", ",") + "%")
+        tirage_l= self.spinBoxDiceNumber.value()
+        n_simu = 50000
+        X = np.zeros((tirage_l, n_simu))
+        Y = X.copy()
+        MAX = np.zeros(n_simu)
+        for i in range(n_simu):
+            X[:, i] = np.random.randint(0, 10000, tirage_l) >= 10000 * self.proba_win
+
+        for i in range(n_simu):
+            for j in range(tirage_l):
+                Y[j, i] = (Y[j - 1, i] + X[j, i]) * X[j, i]
+            MAX[i] = max(Y[:, i])
+
+        result = sum(MAX > self.practical_lost_bet) / n_simu
+
+        print("Just for fun, the maximum value observed in estimation is %i loss in row..." % max(MAX))
+
+        self.labelOutputBankruptcyRisk.setText(str("%.2f" % (result * 100)).replace(".", ",") + "%")
     
     @pyqtSlot()
     def update_bankruptcy_display(self):
