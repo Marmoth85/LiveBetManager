@@ -50,12 +50,8 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
         self.labelOutputPracticalLostBet.setText(str(self.practical_lost_bet))
         self.labelOutputPracticalCash.setText(str("%.8f" % self.practical_cash) + str(" - %.8f" % self.practical_cash_optimal))
         self.labelOutputPracticalMultiply.setText(str("%.4f" % self.goal_multiply) + str(" - %.4f" % self.practical_multiply))
-    
-    # Si problème avec la conversion des nombres float <-> str : float(machin.text().replace(",", "."))
-    
+
     def compute_inequality(self, vector, way):
-        """To be implemented
-        val_condition = mul_vect ^ n_target * (1 - self.payout + self.payout / mul_vect) - 1"""
         val_condition = [0] * len(vector)
         
         n_target = 1
@@ -70,7 +66,6 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
         return val_condition
     
     def find_minimal_coefficient_index(self, values):
-        """To be implemented"""
         index = 0
         for i in range(len(values)):
             if values[i] <= 0:
@@ -79,8 +74,19 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
         return index
         
     def dichotomy(self, precision):
-        """To be implemented"""
-        return precision + 1.2345678
+        iteration = 0
+        borne_inf = self.goal_multiply
+        borne_sup = 5 * self.goal_multiply
+        multiply_test = 1
+        while iteration <= 1000000 and borne_sup - borne_inf > precision:
+            iteration += 1
+            multiply_test = (borne_inf + borne_sup) / 2.0
+            cash = self.bet * (1 - pow(multiply_test, self.practical_lost_bet)) / (1 - multiply_test)
+            if cash < self.cash:
+                borne_inf = multiply_test
+            else:
+                borne_sup = multiply_test
+        return multiply_test
     
     @pyqtSlot()
     def compute_parameters(self):
