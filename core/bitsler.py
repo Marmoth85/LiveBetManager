@@ -52,14 +52,30 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
 
 # Si problème avec la conversion des nombres float <-> str : float(machin.text().replace(",", "."))
 
-    def compute_inequality(self, vector):
+    def compute_inequality(self, vector, way):
         """To be implemented
         val_condition = mul_vect ^ n_target * (1 - self.payout + self.payout / mul_vect) - 1"""
-        return vector
+        val_condition = [0] * len(vector)
+
+        n_target = 1
+        if way == "goal":
+            n_target = self.goal_lost_bet
+        elif way == "practical":
+            n_target = self.practical_lost_bet
+
+        for i in range(len(vector)):
+            val_condition[i] = pow(vector[i], n_target) * (1 - self.payout + self.payout / vector[i]) - 1
+
+        return val_condition
 
     def find_minimal_coefficient_index(self, values):
         """To be implemented"""
-        return 0
+        index = 0
+        for i in range(len(values)):
+            if values[i] <= 0:
+                index = i
+                break
+        return index
 
     def dichotomy(self, precision):
         """To be implemented"""
@@ -77,7 +93,7 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
 
         # Calcul du coefficient multiplicateur minimal correspondant
         mul_vect = np.linspace(1.00001, ceil(1.0 / proba_lose) + 1, 100000 * (ceil(1.0 / proba_lose) + 1))
-        val = self.compute_inequality(mul_vect)
+        val = self.compute_inequality(mul_vect, "goal")
         self.goal_multiply = mul_vect[self.find_minimal_coefficient_index(val)]
 
         # Calcul de la trésorerie nécessaire
