@@ -28,7 +28,8 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
         self.practical_lost_bet = 0
         self.practical_cash = 0
         self.practical_cash_optimal = 0
-        self.practical_multiply = 0
+        self.practical_multiply_min = 0
+        self.practical_multiply_max = 0
         self.blocked_bets = 0
     
     def load_input_data(self):
@@ -50,15 +51,19 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
         self.labelOutputPracticalRisk.setText(str(self.practical_black_risk))
         self.labelOutputPracticalLostBet.setText(str(self.practical_lost_bet))
         self.labelOutputPracticalCash.setText(str("%.8f" % self.practical_cash) + str(" - %.8f" % self.practical_cash_optimal))
-        self.labelOutputPracticalMultiply.setText(str("%.4f" % self.goal_multiply) + str(" - %.4f" % self.practical_multiply))
+        self.labelOutputPracticalMultiply.setText(str("%.4f" % self.practical_multiply_min) + str(" - %.4f" % self.practical_multiply_max))
         self.spinBoxBlockNumberBet.setValue(self.blocked_bets)
 
-    def compute_inequality(self, vector):
+    def compute_inequality(self, vector, method):
         val_condition = [0.] * len(vector)
-
+        lost_bet = 1
+        if method == "theoretical":
+            lost_bet = self.goal_lost_bet
+        else:
+            lost_bet = self.practical_lost_bet
         for i in range(len(vector)):
             if vector[i] != 1:
-                val_condition[i] = pow(vector[i], self.goal_lost_bet) * (1 - self.payout + self.payout / vector[i]) - 1
+                val_condition[i] = pow(vector[i], lost_bet) * (1 - self.payout + self.payout / vector[i]) - 1
                 if val_condition[i] < -1e10:
                     val_condition[i+1:] = [-1e+11] * (len(vector) - i)
                     break
@@ -110,7 +115,7 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
         
         # Calcul du coefficient multiplicateur minimal correspondant
         mul_vector = np.linspace(1, 1.0 / pow(proba_lose, 5), 100 * int(1.0 / pow(proba_lose, 5)) + 1)
-        val = self.compute_inequality(mul_vector)
+        val = self.compute_inequality(mul_vector, "theoretical")
         self.goal_multiply = mul_vector[self.find_minimal_coefficient_index(val)]
 
         # Calcul de la trésorerie nécessaire
@@ -120,10 +125,14 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
         # Contrainte = trésorerie actuelle souvent inférieure à celle qu'on souhaite pour tenter le coup
         self.practical_lost_bet = int(log(self.cash / self.bet * (self.goal_multiply - 1) + 1) / log(self.goal_multiply))
         self.practical_black_risk = int(1 / pow(proba_lose, self.practical_lost_bet))
-        self.practical_cash = self.bet * (1 - pow(self.goal_multiply, self.practical_lost_bet)) / (1 - self.goal_multiply)
+
+        val2 = self.compute_inequality(mul_vector, "practical")
+        self.practical_multiply_min = mul_vector[self.find_minimal_coefficient_index(val2)]
+
+        self.practical_cash = self.bet * (1 - pow(self.practical_multiply_min, self.practical_lost_bet)) / (1 - self.practical_multiply_min)
         self.practical_cash = ceil(100000000 * self.practical_cash) / 100000000
-        self.practical_multiply = float(int(10000 * self.dichotomy(0.00001, "lost bets max"))) / 10000
-        self.practical_cash_optimal = self.bet * (1 - pow(self.practical_multiply, self.practical_lost_bet)) / (1 - self.practical_multiply)
+        self.practical_multiply_max = float(int(10000 * self.dichotomy(0.00001, "lost bets max"))) / 10000
+        self.practical_cash_optimal = self.bet * (1 - pow(self.practical_multiply_max, self.practical_lost_bet)) / (1 - self.practical_multiply_max)
         self.practical_cash_optimal = ceil(100000000 * self.practical_cash_optimal) / 100000000
         self.blocked_bets = self.practical_lost_bet
 
