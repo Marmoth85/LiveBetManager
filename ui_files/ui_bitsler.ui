@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1000</width>
-    <height>750</height>
+    <height>771</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -599,8 +599,8 @@
    <slot>compute_bankruptcy()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>415</x>
-     <y>732</y>
+     <x>424</x>
+     <y>761</y>
     </hint>
     <hint type="destinationlabel">
      <x>47</x>
@@ -615,12 +615,28 @@
    <slot>maximize_increase_on_loss()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>179</x>
-     <y>588</y>
+     <x>188</x>
+     <y>612</y>
     </hint>
     <hint type="destinationlabel">
      <x>121</x>
      <y>525</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBoxBlockNumberBet</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>Bitsler</receiver>
+   <slot>update_n_break()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>557</x>
+     <y>579</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>673</x>
+     <y>486</y>
     </hint>
    </hints>
   </connection>
@@ -630,5 +646,6 @@
   <slot>update_bankruptcy_display()</slot>
   <slot>compute_parameters()</slot>
   <slot>maximize_increase_on_loss()</slot>
+  <slot>update_n_break()</slot>
  </slots>
 </ui>

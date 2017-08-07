@@ -84,9 +84,7 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
         if method == "lost bets max":
             number_bet = self.practical_lost_bet
         elif method == "fixated lost bets":
-            print("On va modifier la valeur du number_bet")
             number_bet = self.blocked_bets
-            print("On a modifié la valeur du number_bet")
         while iteration <= 1000000 and borne_sup - borne_inf > precision:
             iteration += 1
             multiply_test = (borne_inf + borne_sup) / 2.0
@@ -96,9 +94,6 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
                 value = self.bet * (1 - pow(borne_sup, number_bet)) / (1 - borne_sup)
                 if value < self.cash:
                     borne_sup *= 1.1
-                    print(method)
-                    print("on fait un truc ici")
-                    print(value)
             else:
                 borne_sup = multiply_test
         return multiply_test
@@ -161,9 +156,10 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
 
     @pyqtSlot()
     def maximize_increase_on_loss(self):
-        print("On va calculer la value")
-        self.blocked_bets = self.spinBoxBlockNumberBet.value()
-        print(self.blocked_bets)
         value = self.dichotomy(0.00001, "fixated lost bets")
-        print("Value calculée")
         self.labelIncreaseOnlossMAX.setText(str("%.4f" % value))
+
+    @pyqtSlot()
+    def update_n_break(self):
+        self.blocked_bets = self.spinBoxBlockNumberBet.value()
+        self.labelIncreaseOnlossMAX.setText("-- Mettre à jour --")
