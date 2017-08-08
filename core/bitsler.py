@@ -1,11 +1,13 @@
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import pyqtSlot
 
-from math import log, ceil, pow
+from math import log, ceil, pow, factorial
 import numpy as np
+import sys
 
 from gen_files import ui_bitsler
 
+sys.setrecursionlimit(20000)
 
 class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
     def __init__(self, parent=None):
@@ -141,6 +143,7 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
     @pyqtSlot()
     def compute_bankruptcy(self):
         tirage_l= self.spinBoxDiceNumber.value()
+        """
         n_simu = 50000
         X = np.zeros((tirage_l, n_simu))
         Y = X.copy()
@@ -153,9 +156,11 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
                 Y[j, i] = (Y[j - 1, i] + X[j, i]) * X[j, i]
             MAX[i] = max(Y[:, i])
 
-        result = sum(MAX > self.blocked_bets) / n_simu
+        result = sum(MAX >= self.blocked_bets) / n_simu
+        """
+        result = self.probOfStreak(tirage_l, self.blocked_bets, 1 - self.proba_win)
 
-        print("Just for fun, the maximum value observed in estimation is %i loss in row..." % max(MAX))
+        # print("Just for fun, the maximum value observed in estimation is %i loss in row..." % max(MAX))
 
         self.labelOutputBankruptcyRisk.setText(str("%.2f" % (result * 100)).replace(".", ",") + "%")
     
@@ -172,3 +177,23 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
     def update_n_break(self):
         self.blocked_bets = self.spinBoxBlockNumberBet.value()
         self.labelIncreaseOnlossMAX.setText("-- Mettre à jour --")
+
+    def probOfStreak(self, numCoins, minHeads, headprob, saved=None):
+        if saved == None: saved = {}
+
+        ID = (numCoins, minHeads, headprob)
+        if ID in saved:
+            return saved[ID]
+        else:
+            if minHeads > numCoins or numCoins <= 0:
+                result = 0
+            else:
+                result = headprob**minHeads
+                print(result)
+                for firstTail in range(1, minHeads + 1):
+                    pr = self.probOfStreak(numCoins - firstTail, minHeads, headprob, saved)
+                    print(pr)
+                    result += (headprob**(firstTail - 1))*(1 - headprob)*pr
+                    print("result= " + str("%f" % result))
+            saved[ID] = result
+            return result
