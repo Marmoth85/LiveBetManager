@@ -1,15 +1,14 @@
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import pyqtSlot
 
-from math import log, ceil, pow, factorial
+from math import log, ceil, pow
 import numpy as np
-import sys
 
 from gen_files import ui_bitsler
 
-sys.setrecursionlimit(20000)
 
 class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
+
     def __init__(self, parent=None):
         super(Bitsler, self).__init__(parent)
         self.setupUi(self)
@@ -58,7 +57,6 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
 
     def compute_inequality(self, vector, method):
         val_condition = [0.] * len(vector)
-        # lost_bet = 1
         if method == "theoretical":
             lost_bet = self.goal_lost_bet
         else:
@@ -171,16 +169,3 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
     def update_n_break(self):
         self.blocked_bets = self.spinBoxBlockNumberBet.value()
         self.labelIncreaseOnlossMAX.setText("-- Mettre à jour --")
-
-    def probOfStreak(self, numCoins, minHeads, headprob):
-        memo = [0.] * (numCoins + 1)
-
-        for i in range(minHeads, numCoins + 1, 1):
-            result = pow(headprob, minHeads)
-            for first_tail in range(1, minHeads + 1, 1):
-                pr = memo[i - first_tail]
-                result += pow(headprob, first_tail - 1) * (1 - headprob) * pr
-            memo[i] = result
-        print(memo)
-
-        return memo[numCoins]
