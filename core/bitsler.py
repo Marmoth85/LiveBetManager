@@ -58,7 +58,7 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
 
     def compute_inequality(self, vector, method):
         val_condition = [0.] * len(vector)
-        lost_bet = 1
+        # lost_bet = 1
         if method == "theoretical":
             lost_bet = self.goal_lost_bet
         else:
@@ -142,27 +142,21 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
     
     @pyqtSlot()
     def compute_bankruptcy(self):
-        tirage_l= self.spinBoxDiceNumber.value()
-        """
-        n_simu = 50000
-        X = np.zeros((tirage_l, n_simu))
-        Y = X.copy()
-        MAX = np.zeros(n_simu)
-        for i in range(n_simu):
-            X[:, i] = np.random.randint(0, 10000, tirage_l) >= 10000 * self.proba_win
 
-        for i in range(n_simu):
-            for j in range(tirage_l):
-                Y[j, i] = (Y[j - 1, i] + X[j, i]) * X[j, i]
-            MAX[i] = max(Y[:, i])
+        num_coins = self.spinBoxDiceNumber.value()
+        min_heads = self.blocked_bets
+        head_prob = 1 - self.proba_win
 
-        result = sum(MAX >= self.blocked_bets) / n_simu
-        """
-        result = self.probOfStreak(tirage_l, self.blocked_bets, 1 - self.proba_win)
+        memo = [0.] * (num_coins + 1)
 
-        # print("Just for fun, the maximum value observed in estimation is %i loss in row..." % max(MAX))
+        for i in range(min_heads, num_coins + 1, 1):
+            result = pow(head_prob, min_heads)
+            for first_tail in range(1, min_heads + 1, 1):
+                pr = memo[i - first_tail]
+                result += pow(head_prob, first_tail - 1) * (1 - head_prob) * pr
+            memo[i] = result
 
-        self.labelOutputBankruptcyRisk.setText(str("%.2f" % (result * 100)).replace(".", ",") + "%")
+        self.labelOutputBankruptcyRisk.setText(str("%.2f" % (memo[num_coins] * 100)).replace(".", ",") + "%")
     
     @pyqtSlot()
     def update_bankruptcy_display(self):
@@ -178,22 +172,15 @@ class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
         self.blocked_bets = self.spinBoxBlockNumberBet.value()
         self.labelIncreaseOnlossMAX.setText("-- Mettre à jour --")
 
-    def probOfStreak(self, numCoins, minHeads, headprob, saved=None):
-        if saved == None: saved = {}
+    def probOfStreak(self, numCoins, minHeads, headprob):
+        memo = [0.] * (numCoins + 1)
 
-        ID = (numCoins, minHeads, headprob)
-        if ID in saved:
-            return saved[ID]
-        else:
-            if minHeads > numCoins or numCoins <= 0:
-                result = 0
-            else:
-                result = headprob**minHeads
-                print(result)
-                for firstTail in range(1, minHeads + 1):
-                    pr = self.probOfStreak(numCoins - firstTail, minHeads, headprob, saved)
-                    print(pr)
-                    result += (headprob**(firstTail - 1))*(1 - headprob)*pr
-                    print("result= " + str("%f" % result))
-            saved[ID] = result
-            return result
+        for i in range(minHeads, numCoins + 1, 1):
+            result = pow(headprob, minHeads)
+            for first_tail in range(1, minHeads + 1, 1):
+                pr = memo[i - first_tail]
+                result += pow(headprob, first_tail - 1) * (1 - headprob) * pr
+            memo[i] = result
+        print(memo)
+
+        return memo[numCoins]
