@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Bitsler</class>
- <widget class="QWidget" name="Bitsler">
+ <class>DiceCalculator</class>
+ <widget class="QWidget" name="DiceCalculator">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -563,7 +563,7 @@
   <connection>
    <sender>spinBoxDiceNumber</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>Bitsler</receiver>
+   <receiver>DiceCalculator</receiver>
    <slot>update_bankruptcy_display()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -579,7 +579,7 @@
   <connection>
    <sender>pushButtonCalculateParameters</sender>
    <signal>clicked()</signal>
-   <receiver>Bitsler</receiver>
+   <receiver>DiceCalculator</receiver>
    <slot>compute_parameters()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -595,7 +595,7 @@
   <connection>
    <sender>pushButtonCalculateRisk</sender>
    <signal>pressed()</signal>
-   <receiver>Bitsler</receiver>
+   <receiver>DiceCalculator</receiver>
    <slot>compute_bankruptcy()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -611,7 +611,7 @@
   <connection>
    <sender>pushButtonIncreaseOnLossMAX</sender>
    <signal>clicked()</signal>
-   <receiver>Bitsler</receiver>
+   <receiver>DiceCalculator</receiver>
    <slot>maximize_increase_on_loss()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -627,7 +627,7 @@
   <connection>
    <sender>spinBoxBlockNumberBet</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>Bitsler</receiver>
+   <receiver>DiceCalculator</receiver>
    <slot>update_n_break()</slot>
    <hints>
     <hint type="sourcelabel">

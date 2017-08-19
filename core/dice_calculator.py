@@ -4,13 +4,13 @@ from PyQt5.QtCore import pyqtSlot
 from math import log, ceil, pow
 import numpy as np
 
-from gen_files import ui_bitsler
+from gen_files import ui_dice_calculator
 
 
-class Bitsler(QWidget, ui_bitsler.Ui_Bitsler):
+class DiceCalculator(QWidget, ui_dice_calculator.Ui_DiceCalculator):
 
     def __init__(self, parent=None):
-        super(Bitsler, self).__init__(parent)
+        super(DiceCalculator, self).__init__(parent)
         self.setupUi(self)
         
         # Paramètres d'entrée au départ du pari
