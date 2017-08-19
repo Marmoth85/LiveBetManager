@@ -580,7 +580,7 @@
    <sender>pushButtonCalculateParameters</sender>
    <signal>clicked()</signal>
    <receiver>DiceCalculator</receiver>
-   <slot>compute_parameters()</slot>
+   <slot>compute_expectation()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>507</x>
@@ -644,7 +644,7 @@
  <slots>
   <slot>compute_bankruptcy()</slot>
   <slot>update_bankruptcy_display()</slot>
-  <slot>compute_parameters()</slot>
+  <slot>compute_expectation()</slot>
   <slot>maximize_increase_on_loss()</slot>
   <slot>update_n_break()</slot>
  </slots>
