@@ -50,9 +50,10 @@
    </widget>
    <widget class="QMenu" name="menuCalculateur_Dice_Roll">
     <property name="title">
-     <string>Calculateur Dice/Roll</string>
+     <string>Jeux d'argent</string>
     </property>
-    <addaction name="actionOuvrir_Feuille_de_calcul"/>
+    <addaction name="actionCalculator"/>
+    <addaction name="actionSimulator"/>
    </widget>
    <addaction name="menuGestion_Paris"/>
    <addaction name="menuGraphiques"/>
@@ -95,9 +96,14 @@
     <string>Quitter</string>
    </property>
   </action>
-  <action name="actionOuvrir_Feuille_de_calcul">
+  <action name="actionCalculator">
    <property name="text">
-    <string>Ouvrir Feuille de calcul</string>
+    <string>Calculateur de stratégie</string>
+   </property>
+  </action>
+  <action name="actionSimulator">
+   <property name="text">
+    <string>Simulation de stratégie</string>
    </property>
   </action>
  </widget>
