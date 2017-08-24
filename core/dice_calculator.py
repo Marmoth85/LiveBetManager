@@ -37,10 +37,10 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         self.__event_probability = self.doubleSpinBox_input_proba_event.value() / 100
         self.__payout = self.doubleSpinBox_input_payout.value()
         self.__wished_dices = self.spinBox_input_dice_number.value()
-        self.__probability_in_row = self.spinBox_risk_serie.value()
+        self.__probability_in_row = (lambda x: 1 / x if x != 0 else 0.0)(self.spinBox_risk_serie.value())
         self.__black_in_row = self.spinBox_streak_serie.value()
-        self.__increase_decrease_on_loss = self.doubleSpinBox_increase_bet.value()
-        self.__bankruptcy_probability = self.doubleSpinBox_bankruptcy_probability.value()
+        self.__increase_decrease_on_loss = 1 + self.doubleSpinBox_increase_bet.value() / 100
+        self.__bankruptcy_probability = self.doubleSpinBox_bankruptcy_probability.value() / 100
         
         if self.radioButton_risk_serie.isChecked():
             self.__choosen_method = "Risque de la série négative"
@@ -54,20 +54,31 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
     def update_result_data(self):
         """Cette méthode récupère les résultats des calculs effectués pour les afficher dans l'IHM"""
         
-        # Objectifs théoriques
-        self.labelOutputBlackRiskGoal.setText(str(self.__probability_in_row_expected))
-        self.labelOutputLostBetGoal.setText(str(self.__black_in_row_expected))
-        self.labelOutputCashGoal.setText(str("%.8f" % self.__goal_cash))
-        self.labelOutputMultiplyGoal.setText(str("%.4f" % self.__goal_multiply))
-    
-        # Empiriquement
-        self.labelOutputPracticalRisk.setText(str(self.__probability_in_row_computed))
-        self.labelOutputPracticalLostBet.setText(str(self.__black_in_row_computed))
-        self.labelOutputPracticalCash.setText(
-            str("%.8f" % self.__practical_cash) + str(" - %.8f" % self.__practical_cash_optimal))
-        self.labelOutputPracticalMultiply.setText(
-            str("%.4f" % self.__practical_multiply_min) + str(" - %.4f" % self.__practical_multiply_max))
-        self.spinBoxBlockNumberBet.setValue(self.__black_in_row_selected)
+        self.label_output_choosen_method.setText(self.__choosen_method)
+        self.label_output_lost_bet.setText(str(self.__computed_lost_bet))
+        self.label_output_risk_serie.setText(str((lambda x: int(1 / x) if x != 0 else 0.0)(self.__computed_risk_serie)))
+        self.label_output_minimal_increase_bet.setText(str("%.2f" % (lambda x: (x - 1) * 100)(self.__minimal_increase_bet) + " %"))
+        self.label_output_maximal_increase_bet.setText(str("%.2f" % (lambda x: (x - 1) * 100)(self.__maximal_increase_bet) + " %"))
+        self.label_output_minimal_cash.setText(str("%.8f" % self.__minimal_cash))
+        self.label_output_maximal_cash.setText(str("%.8f" % self.__maximal_cash))
+        self.label_output_streak_probability.setText(str("%.2f" % (lambda x: 100 * x)(self.__streak_probability) + " %"))
+        
+        if self.__choosen_method == "Probabilité maximale de l'échec de la martingale":
+            self.label_output_lost_bet_opt.setText(str(self.__computed_lost_bet_opt))
+            self.label_output_risk_serie_opt.setText(str((lambda x: int(1 / x) if x != 0 else 0.0)(self.__computed_risk_serie_opt)))
+            self.label_output_minimal_increase_bet_opt.setText(str("%.2f" % (lambda x: (x - 1) * 100)(self.__minimal_increase_bet_opt) + " %"))
+            self.label_output_maximal_increase_bet_opt.setText(str("%.2f" % (lambda x: (x - 1) * 100)(self.__maximal_increase_bet_opt) + " %"))
+            self.label_output_minimal_cash_opt.setText(str("%.8f" % self.__minimal_cash_opt))
+            self.label_output_maximal_cash_opt.setText(str("%.8f" % self.__maximal_cash_opt))
+            self.label_output_streak_probability_opt.setText(str("%.2f" % (lambda x: 100 * x)(self.__streak_probability_opt) + "    %"))
+        else:
+            self.label_output_lost_bet_opt.setText("--")
+            self.label_output_risk_serie_opt.setText("--")
+            self.label_output_minimal_increase_bet_opt.setText("--")
+            self.label_output_maximal_increase_bet_opt.setText("--")
+            self.label_output_minimal_cash_opt.setText("--")
+            self.label_output_maximal_cash_opt.setText("--")
+            self.label_output_streak_probability_opt.setText("--")
 
     def check_inputs(self):
         """Cette méthode a pour objet de vérifier que les inputs soient cohérents.
