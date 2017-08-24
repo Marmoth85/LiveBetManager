@@ -32,12 +32,24 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         """Cette méthode récupère les informations depuis l'IHM pour les stocker dans les attributs d'objets,
         afin de pouvoir les exploiter facilement dans les calculs qui suivront."""
         
-        self.__cash = self.doubleSpinBox_Cash.value()
-        self.__bet = self.doubleSpinBox_Bet.value()
-        self.__event_probability = self.doubleSpinBox_Proba.value() / 100
-        self.__payout = self.doubleSpinBox_Payout.value()
-        self.__wished_dices = self.spinBoxDiceNumber.value()
-        self.__black_risk = self.spinBoxBlackRisk.value()
+        self.__cash = self.doubleSpinBox_input_cash.value()
+        self.__bet = self.doubleSpinBox_input_bet.value()
+        self.__event_probability = self.doubleSpinBox_input_proba_event.value() / 100
+        self.__payout = self.doubleSpinBox_input_payout.value()
+        self.__wished_dices = self.spinBox_input_dice_number.value()
+        self.__probability_in_row = self.spinBox_risk_serie.value()
+        self.__black_in_row = self.spinBox_streak_serie.value()
+        self.__increase_decrease_on_loss = self.doubleSpinBox_increase_bet.value()
+        self.__bankruptcy_probability = self.doubleSpinBox_bankruptcy_probability.value()
+        
+        if self.radioButton_risk_serie.isChecked():
+            self.__choosen_method = "Risque de la série négative"
+        elif self.radioButton_streak_serie.isChecked():
+            self.__choosen_method = "Nombre de paris perdus à la suite"
+        elif self.radioButton_increase_bet.isChecked():
+            self.__choosen_method = "Augmentation des mises en cas de pari perdu"
+        elif self.radioButton_bankruptcy_probability.isChecked():
+            self.__choosen_method = "Probabilité maximale de l'échec de la martingale"
 
     def update_result_data(self):
         """Cette méthode récupère les résultats des calculs effectués pour les afficher dans l'IHM"""
@@ -70,6 +82,15 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         correspond pas à ce que nous voudrions sur un plan purement théorique."""
     
         self.load_input_data()
+        # Tester le choix de la méthode
+        # Appeler la procédure correspondante
+        self.update_result_data()
+
+    def compute_lose_in_tow_method(self):
+        """Cette méthode calcule les paramètres théoriques souhaités ainsi que ceux, pragmatiques, quand la trésorerie
+        réelle ne correspond pas à ce que nous voudrions sur un plan purement théorique."""
+    
+        self.load_input_data()
     
         vector_coefficient = np.linspace(1, 1.0 / pow(1 - self.__event_probability, 5),
                                          100 * int(1.0 / pow(1 - self.__event_probability, 5)) + 1)
@@ -81,8 +102,6 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         self.compute_streak_practical()
         self.compute_increase_on_loss_practical(vector_coefficient)
         self.compute_cash_practical()
-    
-        self.update_result_data()
         
     def compute_streak_goal(self):
         """Calcule le nombre de coups perdants associé au risque concédé"""
