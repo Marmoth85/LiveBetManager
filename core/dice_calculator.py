@@ -203,11 +203,10 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         return multiply_test
     
     @pyqtSlot()
-    def compute_bankruptcy(self):
-        """Ce SLOT porte mal son nom et sera changé ultérieurement.
-        Dans ce SLOT, on calcule la probabilité, pour n tirages consécutifs, que notre scénario catastrophe,
+    def calculate_probability_of_streak(self):
+        """Dans ce SLOT, on calcule la probabilité, pour n tirages consécutifs, que notre scénario catastrophe,
         à savoir que le nombre de paris perdus consécutifs nous amène à la banqueroute, arrive avec la stratégie que 
-        nous avons défini dans le widget."""
+        nous avons défini dans le widget. Plus on joue, plus cette probabilité augmente, ce qui est intuitif."""
         
         self.load_input_data()
         num_coins = self.__wished_dices
