@@ -2,7 +2,6 @@ class Gambling:
     
     def __init__(self):
         """ On défini les variables que l'on utilisera dans les classes filles """
-        # common inputs
         self.__currency = ""
         self.__cash = 0.
         self.__cash_precision_spinbox = 0
@@ -13,10 +12,8 @@ class Gambling:
         self.__increase_decrease_on_win = 1.
         self.__increase_decrease_on_loss = 1.
         self.__wished_dices = 0
-        self.__black_in_row_expected = 0
-        self.__black_in_row_selected = 0
-        self.__probability_in_row_expected = 0.
-        self.__probability_in_row_selected = 0.
+        self.__black_in_row = 0
+        self.__probability_in_row = 0.
         self.__bankruptcy_probability = 0.
         
     def load_input_data(self):

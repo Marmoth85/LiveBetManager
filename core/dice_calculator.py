@@ -11,28 +11,23 @@ from . import gambling
 class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalculator):
 
     def __init__(self, parent=None):
-        """Constructeur du DiceCalculator: cette classe hérite de Gambling.
+        """Constructeur du DiceCalculator: cette classe hérite de Gambling (qui rassemble tous les inputs).
         On récupère l'initiation des attributs de Gambling et on initialise les attributs spécifiques à cette classe.
         Enfin, on dessine le widget à l'aide de la classe créée par pyuic5: Ui_DiceCalculator."""
         
         super(DiceCalculator, self).__init__(parent)
         self.setupUi(self)
         
-        # Paramètres d'entrée au départ du pari (en plus de la classe mère gambling)
-        self.__black_risk = 0
+        # Définition des attributs spécifiques à la classe DiceCalculator
+        self.__choosen_method = ""
+        self.__computed_lost_bet, self.__computed_lost_bet_opt = 0, 0
+        self.__computed_risk_serie, self.__computed_risk_serie_opt = 0., 0.
+        self.__minimal_increase_bet, self.__minimal_increase_bet_opt = 0., 0.
+        self.__maximal_increase_bet, self.__maximal_increase_bet_opt = 0., 0.
+        self.__minimal_cash, self.__minimal_cash_opt = 0., 0.
+        self.__maximal_cash, self.__maximal_cash_opt = 0., 0.
+        self.__streak_probability, self.__streak_probability_opt = 0., 0.
         
-        # Résultats et paramètres théoriques à calculer
-        self.__goal_cash = 0.
-        self.__goal_multiply = 0.
-        
-        # Résultats et paramètres pratiques à utiliser en raison de la limitation due à la trésorerie actuelle
-        self.__probability_in_row_computed = 0.
-        self.__black_in_row_computed = 0
-        self.__practical_cash = 0.
-        self.__practical_cash_optimal = 0.
-        self.__practical_multiply_min = 0.
-        self.__practical_multiply_max = 0.
-
     def load_input_data(self):
         """Cette méthode récupère les informations depuis l'IHM pour les stocker dans les attributs d'objets,
         afin de pouvoir les exploiter facilement dans les calculs qui suivront."""
@@ -67,6 +62,27 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         Aucun calcul ne doit être lancé sans être assuré de la bonne forme des paramètres d'entrée"""
         
         print("Checking the inputs is not yet implemented")
+
+    @pyqtSlot()
+    def compute_expectation(self):
+        """Cette méthode est un SLOT déclenché par le bouton "Calculer".
+        On calcule les paramètres théoriques souhaités ainsi que ceux, pragmatiques, quand la trésorerie réelle ne
+        correspond pas à ce que nous voudrions sur un plan purement théorique."""
+    
+        self.load_input_data()
+    
+        vector_coefficient = np.linspace(1, 1.0 / pow(1 - self.__event_probability, 5),
+                                         100 * int(1.0 / pow(1 - self.__event_probability, 5)) + 1)
+    
+        self.compute_streak_goal()
+        self.compute_increase_on_loss_goal(vector_coefficient)
+        self.compute_cash_goal()
+    
+        self.compute_streak_practical()
+        self.compute_increase_on_loss_practical(vector_coefficient)
+        self.compute_cash_practical()
+    
+        self.update_result_data()
         
     def compute_streak_goal(self):
         """Calcule le nombre de coups perdants associé au risque concédé"""
@@ -118,27 +134,6 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
             1 - pow(self.__practical_multiply_max, self.__black_in_row_computed)) / (1 - self.__practical_multiply_max)
         self.__practical_cash_optimal = ceil(100000000 * self.__practical_cash_optimal) / 100000000
         self.__black_in_row_selected = self.__black_in_row_computed
-
-    @pyqtSlot()
-    def compute_expectation(self):
-        """Cette méthode est un SLOT déclenché par le bouton "Calculer".
-        On calcule les paramètres théoriques souhaités ainsi que ceux, pragmatiques, quand la trésorerie réelle ne
-        correspond pas à ce que nous voudrions sur un plan purement théorique."""
-        
-        self.load_input_data()
-
-        vector_coefficient = np.linspace(1, 1.0 / pow(1 - self.__event_probability, 5),
-                                 100 * int(1.0 / pow(1 - self.__event_probability, 5)) + 1)
-    
-        self.compute_streak_goal()
-        self.compute_increase_on_loss_goal(vector_coefficient)
-        self.compute_cash_goal()
-        
-        self.compute_streak_practical()
-        self.compute_increase_on_loss_practical(vector_coefficient)
-        self.compute_cash_practical()
-    
-        self.update_result_data()
     
     def compute_inequality(self, vector, method):
         """Dans cette méthode, on calcule l'inéquation qui nous assure de ne pas faire de pertes lorsque,
@@ -248,3 +243,11 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         
         self.__black_in_row_selected = self.spinBoxBlockNumberBet.value()
         self.labelIncreaseOnlossMAX.setText("-- Mettre à jour --")
+
+    @pyqtSlot()
+    def currency_changed(self):
+        pass
+    
+    @pyqtSlot()
+    def precision_changed(self):
+        pass
