@@ -238,12 +238,15 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         val = self.compute_inequality(vector, "theoretical")
         self.__goal_multiply = vector[self.find_minimal_coefficient_index(val)]
      
-    def compute_cash_goal(self):
-        """Calcule la trésorerie nécessaire pour encaisser les n coups perdants de suite calculés"""
+    def compute_cash(self, reason):
+        """Calcule la trésorerie nécessaire pour encaisser les n_streak paris perdants consécutifs pour un facteur
+        d'augmentation des mises en cas de paris perdu donné par la variable reason"""
         
-        self.__goal_cash = self.__bet * (
-            1 - pow(self.__goal_multiply, self.__black_in_row_expected) ) / (1 - self.__goal_multiply)
-        self.__goal_cash = ceil(100000000 * self.__goal_cash) / 100000000
+        print("DEBUG : On entre dans la méthode DiceCalculator::compute_cash()")
+        cash = self._bet * (1 - reason ** (self._computed_lost_bet + 1)) / (1 - reason)
+        cash = ceil(100000000 * cash) / 100000000
+        print("DEBUG : On sort de la méthode DiceCalculator::compute_cash()")
+        return cash
 
     def compute_streak_practical(self):
         """Calcule le nombre de coups perdants associé au risque pratique (lié au manque de cash) concédé"""
