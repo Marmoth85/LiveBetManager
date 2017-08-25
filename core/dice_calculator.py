@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QMessageBox
 from PyQt5.QtCore import pyqtSlot
 
 from math import log, ceil, pow, floor
@@ -32,6 +32,7 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         """Cette méthode récupère les informations depuis l'IHM pour les stocker dans les attributs d'objets,
         afin de pouvoir les exploiter facilement dans les calculs qui suivront."""
         
+        print("DEBUG : on entre dans DiceCalculator::load_input_data()")
         self.__cash = self.doubleSpinBox_input_cash.value()
         self.__bet = self.doubleSpinBox_input_bet.value()
         self.__event_probability = self.doubleSpinBox_input_proba_event.value() / 100
@@ -50,10 +51,12 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
             self.__choosen_method = "Augmentation des mises en cas de pari perdu"
         elif self.radioButton_bankruptcy_probability.isChecked():
             self.__choosen_method = "Probabilité maximale de l'échec de la martingale"
+        print("DEBUG : on sort de DiceCalculator::load_input_data()")
 
     def update_result_data(self):
         """Cette méthode récupère les résultats des calculs effectués pour les afficher dans l'IHM"""
         
+        print("DEBUG : on entre dans DiceCalculator::update_result_data()")
         self.label_output_choosen_method.setText(self.__choosen_method)
         self.label_output_lost_bet.setText(str(self.__computed_lost_bet))
         self.label_output_risk_serie.setText(str((lambda x: int(1 / x) if x != 0 else 0.0)(self.__computed_risk_serie)))
@@ -70,7 +73,7 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
             self.label_output_maximal_increase_bet_opt.setText(str("%.2f" % (lambda x: (x - 1) * 100)(self.__maximal_increase_bet_opt) + " %"))
             self.label_output_minimal_cash_opt.setText(str("%.8f" % self.__minimal_cash_opt))
             self.label_output_maximal_cash_opt.setText(str("%.8f" % self.__maximal_cash_opt))
-            self.label_output_streak_probability_opt.setText(str("%.2f" % (lambda x: 100 * x)(self.__streak_probability_opt) + "    %"))
+            self.label_output_streak_probability_opt.setText(str("%.2f" % (lambda x: 100 * x)(self.__streak_probability_opt) + " %"))
         else:
             self.label_output_lost_bet_opt.setText("--")
             self.label_output_risk_serie_opt.setText("--")
@@ -79,23 +82,68 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
             self.label_output_minimal_cash_opt.setText("--")
             self.label_output_maximal_cash_opt.setText("--")
             self.label_output_streak_probability_opt.setText("--")
+        print("DEBUG : on sort de DiceCalculator::update_result_data()")
 
     def check_inputs(self):
         """Cette méthode a pour objet de vérifier que les inputs soient cohérents.
         Aucun calcul ne doit être lancé sans être assuré de la bonne forme des paramètres d'entrée"""
+
+        print("DEBUG : on entre dans DiceCalculator::check_inputs()")
+        message = ""
+        test = True
+        if self.__cash == 0:
+            message += "La trésorerie ne peut pas être nulle pour pouvoir jouer...\n"
+            test = False
+        if self.__bet == 0 or self.__bet > self.__cash:
+            message += "Le montant du pari ne peut ni être nul, ni supérieur à la trésorerie disponible...\n"
+            test = False
+        if self.__wished_dices == 0:
+            message += "Le nombre de dés à jouer ne peut pas être égal à zéro...\n"
+            test = False
+        if self.__choosen_method == "":
+            message += "Avant de lancer les calculs, il vous faut choisir une des quatre méthodes proposées...\n"
+            test = False
+        if self.__choosen_method == "Risque de la série négative" and self.__probability_in_row == 0:
+            message += "Le risque de la série négative est incorrect (division par zéro...)\n"
+            test = False
+        if self.__choosen_method == "Nombre de paris perdus à la suite" and self.__black_in_row <= 1:
+            message += "La martingale géométrique ne peut être calculée que pour des séries de deux paris perdants ou plus...\n"
+            test = False
+        if self.__choosen_method == "Augmentation des mises en cas de pari perdu" and self.__increase_decrease_on_loss <= 1:
+            message += "La valeur saisie dans l'augmentation des mises n'est pas cohérente avec la mise en place d'une martingale géométrique...\n"
+            test = False
+        if self.__choosen_method == "Probabilité maximale de l'échec de la martingale":
+            if self.__bankruptcy_probability == 0:
+                message += "La probabilité de l'échec de la stratégie ne peut pas être nulle...\n"
+                test = False
+            if self.__bankruptcy_probability == 1:
+                message += "Choisir une probabilité d'échec de la stratégie égale à 1 est définitivement stupide...\n"
+                test = False
+        if not test:
+            self.display_input_error_message(message)
+        print("DEBUG : on sort de DiceCalculator::check_inputs()")
+        return test
         
-        print("Checking the inputs is not yet implemented")
 
     @pyqtSlot()
     def compute_expectation(self):
         """Cette méthode est un SLOT déclenché par le bouton "Calculer".
         On calcule les paramètres théoriques souhaités ainsi que ceux, pragmatiques, quand la trésorerie réelle ne
         correspond pas à ce que nous voudrions sur un plan purement théorique."""
-    
+
+        print("DEBUG : on entre dans DiceCalculator::compute_expectation()")
         self.load_input_data()
-        # Tester le choix de la méthode
-        # Appeler la procédure correspondante
-        self.update_result_data()
+
+        if self.check_inputs():
+            # Tester le choix de la méthode
+            # Appeler la procédure correspondante
+            self.update_result_data()
+        print("DEBUG : on sort de DiceCalculator::compute_expectation()")
+
+    def display_input_error_message(self, message):
+        print("DEBUG : on entre dans DiceCalculator::display_input_error_message()")
+        QMessageBox.critical(self, "Erreur dans les paramètres d'entrée", message)
+        print("DEBUG : on sort de DiceCalculator::display_input_error_message()")
 
     def compute_lose_in_tow_method(self):
         """Cette méthode calcule les paramètres théoriques souhaités ainsi que ceux, pragmatiques, quand la trésorerie

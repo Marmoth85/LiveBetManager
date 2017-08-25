@@ -532,12 +532,24 @@
      <property name="locale">
       <locale language="English" country="UnitedStates"/>
      </property>
+     <property name="decimals">
+      <number>4</number>
+     </property>
+     <property name="maximum">
+      <double>100000000.000000000000000</double>
+     </property>
     </widget>
    </item>
    <item row="13" column="1">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_bankruptcy_probability">
      <property name="locale">
       <locale language="English" country="UnitedStates"/>
+     </property>
+     <property name="decimals">
+      <number>2</number>
+     </property>
+     <property name="maximum">
+      <double>100.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -704,12 +716,18 @@
      <property name="text">
       <string>Nombre de paris perdants consécutifs :</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="20" column="2">
     <widget class="QLabel" name="label_risk_serie_opt">
      <property name="text">
       <string>Risque de série noire : 1 chance sur ...</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -718,12 +736,18 @@
      <property name="text">
       <string>Augmentation minimale des mises :</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="22" column="2">
     <widget class="QLabel" name="label_maximal_increase_bet_opt">
      <property name="text">
       <string>Augmentation maximale des mises :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -732,6 +756,9 @@
      <property name="text">
       <string>Trésorerie minimale nécessaire :</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="24" column="2">
@@ -739,12 +766,18 @@
      <property name="text">
       <string>Trésorerie maximale nécessaire :</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="25" column="2">
     <widget class="QLabel" name="label_streak_probability_opt">
      <property name="text">
       <string>Probabilité d'échec de la martingale :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
