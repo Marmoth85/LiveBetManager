@@ -338,27 +338,26 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
                 borne_sup = multiply_test
         return multiply_test
     
-    @pyqtSlot()
-    def calculate_probability_of_streak(self):
-        """Dans ce SLOT, on calcule la probabilité, pour n tirages consécutifs, que notre scénario catastrophe,
-        à savoir que le nombre de paris perdus consécutifs nous amène à la banqueroute, arrive avec la stratégie que 
-        nous avons défini dans le widget. Plus on joue, plus cette probabilité augmente, ce qui est intuitif."""
+    def calculate_probability_of_streak(self, n_streak):
+        """Dans cette méthode, on calcule la probabilité, pour n_streak tirages consécutifs, que notre scénario
+        catastrophe arrive avec la stratégie que nous avons défini dans le widget, à savoir que le nombre de paris
+        perdus consécutifs nous amène à la banqueroute. Plus on joue et logiquement plus cette probabilité augmente."""
         
-        self.load_input_data()
-        num_coins = self.__wished_dices
-        min_heads = self.__black_in_row_selected
-        head_prob = 1 - self.__event_probability
+        print("DEBUG : On entre dans la méthode DiceCalculator::calculate_probability_of_streak")
+        num_coins = self._wished_dices              # Nombre de paris total
+        min_heads = n_streak                        # Nombre de paris perdants consécutifs
+        head_prob = 1 - self._event_probability     # Probabilité du pari perdu
 
         memo = [0.] * (num_coins + 1)
 
         for i in range(min_heads, num_coins + 1, 1):
-            result = pow(head_prob, min_heads)
+            result = head_prob ** min_heads
             for first_tail in range(1, min_heads + 1, 1):
                 pr = memo[i - first_tail]
-                result += pow(head_prob, first_tail - 1) * (1 - head_prob) * pr
+                result += (head_prob ** (first_tail - 1)) * (1 - head_prob) * pr
             memo[i] = result
-
-        self.labelOutputBankruptcyRisk.setText(str("%.2f" % (memo[num_coins] * 100)).replace(".", ",") + "%")
+        print("DEBUG : On sort de la méthode DiceCalculator::calculate_probability_of_streak")
+        return memo[num_coins]
     
     @pyqtSlot()
     def update_bankruptcy_display(self):
