@@ -19,61 +19,69 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         self.setupUi(self)
         
         # Définition des attributs spécifiques à la classe DiceCalculator
-        self.__choosen_method = ""
-        self.__computed_lost_bet, self.__computed_lost_bet_opt = 0, 0
-        self.__computed_risk_serie, self.__computed_risk_serie_opt = 0., 0.
-        self.__minimal_increase_bet, self.__minimal_increase_bet_opt = 0., 0.
-        self.__maximal_increase_bet, self.__maximal_increase_bet_opt = 0., 0.
-        self.__minimal_cash, self.__minimal_cash_opt = 0., 0.
-        self.__maximal_cash, self.__maximal_cash_opt = 0., 0.
-        self.__streak_probability, self.__streak_probability_opt = 0., 0.
+        self._choosen_method = ""
+        self._computed_lost_bet, self._computed_lost_bet_opt = 0, 0
+        self._computed_risk_serie, self._computed_risk_serie_opt = 0., 0.
+        self._minimal_increase_bet, self._minimal_increase_bet_opt = 0., 0.
+        self._maximal_increase_bet, self._maximal_increase_bet_opt = 0., 0.
+        self._minimal_cash, self._minimal_cash_opt = 0., 0.
+        self._maximal_cash, self._maximal_cash_opt = 0., 0.
+        self._streak_probability, self._streak_probability_opt = 0., 0.
+        
+        self.currency_changed("Bitcoin")
         
     def load_input_data(self):
         """Cette méthode récupère les informations depuis l'IHM pour les stocker dans les attributs d'objets,
         afin de pouvoir les exploiter facilement dans les calculs qui suivront."""
         
         print("DEBUG : on entre dans DiceCalculator::load_input_data()")
-        self.__cash = self.doubleSpinBox_input_cash.value()
-        self.__bet = self.doubleSpinBox_input_bet.value()
-        self.__event_probability = self.doubleSpinBox_input_proba_event.value() / 100
-        self.__payout = self.doubleSpinBox_input_payout.value()
-        self.__wished_dices = self.spinBox_input_dice_number.value()
-        self.__probability_in_row = (lambda x: 1 / x if x != 0 else 0.0)(self.spinBox_risk_serie.value())
-        self.__black_in_row = self.spinBox_streak_serie.value()
-        self.__increase_decrease_on_loss = 1 + self.doubleSpinBox_increase_bet.value() / 100
-        self.__bankruptcy_probability = self.doubleSpinBox_bankruptcy_probability.value() / 100
+        self._cash = self.doubleSpinBox_input_cash.value()
+        self._bet = self.doubleSpinBox_input_bet.value()
+        self._event_probability = self.doubleSpinBox_input_proba_event.value() / 100
+        self._payout = self.doubleSpinBox_input_payout.value()
+        self._wished_dices = self.spinBox_input_dice_number.value()
+        self._probability_in_row = (lambda x: 1 / x if x != 0 else 0.0)(self.spinBox_risk_serie.value())
+        self._black_in_row = self.spinBox_streak_serie.value()
+        self._increase_decrease_on_loss = 1 + self.doubleSpinBox_increase_bet.value() / 100
+        self._bankruptcy_probability = self.doubleSpinBox_bankruptcy_probability.value() / 100
         
         if self.radioButton_risk_serie.isChecked():
-            self.__choosen_method = "Risque de la série négative"
+            self._choosen_method = "Risque de la série négative"
         elif self.radioButton_streak_serie.isChecked():
-            self.__choosen_method = "Nombre de paris perdus à la suite"
+            self._choosen_method = "Nombre de paris perdus à la suite"
         elif self.radioButton_increase_bet.isChecked():
-            self.__choosen_method = "Augmentation des mises en cas de pari perdu"
+            self._choosen_method = "Augmentation des mises en cas de pari perdu"
         elif self.radioButton_bankruptcy_probability.isChecked():
-            self.__choosen_method = "Probabilité maximale de l'échec de la martingale"
+            self._choosen_method = "Probabilité maximale de l'échec de la martingale"
         print("DEBUG : on sort de DiceCalculator::load_input_data()")
 
     def update_result_data(self):
         """Cette méthode récupère les résultats des calculs effectués pour les afficher dans l'IHM"""
         
         print("DEBUG : on entre dans DiceCalculator::update_result_data()")
-        self.label_output_choosen_method.setText(self.__choosen_method)
-        self.label_output_lost_bet.setText(str(self.__computed_lost_bet))
-        self.label_output_risk_serie.setText(str((lambda x: int(1 / x) if x != 0 else 0.0)(self.__computed_risk_serie)))
-        self.label_output_minimal_increase_bet.setText(str("%.2f" % (lambda x: (x - 1) * 100)(self.__minimal_increase_bet) + " %"))
-        self.label_output_maximal_increase_bet.setText(str("%.2f" % (lambda x: (x - 1) * 100)(self.__maximal_increase_bet) + " %"))
-        self.label_output_minimal_cash.setText(str("%.8f" % self.__minimal_cash))
-        self.label_output_maximal_cash.setText(str("%.8f" % self.__maximal_cash))
-        self.label_output_streak_probability.setText(str("%.2f" % (lambda x: 100 * x)(self.__streak_probability) + " %"))
+        self.label_output_choosen_method.setText(self._choosen_method)
+        self.label_output_lost_bet.setText(str(self._computed_lost_bet))
+        self.label_output_risk_serie.setText(str((lambda x: int(1 / x) if x != 0 else 0.0)(self._computed_risk_serie)))
+        self.label_output_minimal_increase_bet.setText(str("%.2f" % (lambda x: (x - 1) * 100
+                                                                     )(self._minimal_increase_bet) + " %"))
+        self.label_output_maximal_increase_bet.setText(str("%.2f" % (lambda x: (x - 1) * 100
+                                                                     )(self._maximal_increase_bet) + " %"))
+        self.label_output_minimal_cash.setText(str("%.8f" % self._minimal_cash))
+        self.label_output_maximal_cash.setText(str("%.8f" % self._maximal_cash))
+        self.label_output_streak_probability.setText(str("%.2f" % (lambda x: 100 * x)(self.__treak_probability) + " %"))
         
         if self.__choosen_method == "Probabilité maximale de l'échec de la martingale":
-            self.label_output_lost_bet_opt.setText(str(self.__computed_lost_bet_opt))
-            self.label_output_risk_serie_opt.setText(str((lambda x: int(1 / x) if x != 0 else 0.0)(self.__computed_risk_serie_opt)))
-            self.label_output_minimal_increase_bet_opt.setText(str("%.2f" % (lambda x: (x - 1) * 100)(self.__minimal_increase_bet_opt) + " %"))
-            self.label_output_maximal_increase_bet_opt.setText(str("%.2f" % (lambda x: (x - 1) * 100)(self.__maximal_increase_bet_opt) + " %"))
-            self.label_output_minimal_cash_opt.setText(str("%.8f" % self.__minimal_cash_opt))
-            self.label_output_maximal_cash_opt.setText(str("%.8f" % self.__maximal_cash_opt))
-            self.label_output_streak_probability_opt.setText(str("%.2f" % (lambda x: 100 * x)(self.__streak_probability_opt) + " %"))
+            self.label_output_lost_bet_opt.setText(str(self._computed_lost_bet_opt))
+            self.label_output_risk_serie_opt.setText(str((lambda x: int(1 / x) if x != 0 else 0.0
+                                                          )(self._computed_risk_serie_opt)))
+            self.label_output_minimal_increase_bet_opt.setText(str("%.2f" % (lambda x: (x - 1) * 100
+                                                                             )(self._minimal_increase_bet_opt) + " %"))
+            self.label_output_maximal_increase_bet_opt.setText(str("%.2f" % (lambda x: (x - 1) * 100
+                                                                             )(self._maximal_increase_bet_opt) + " %"))
+            self.label_output_minimal_cash_opt.setText(str("%.8f" % self._minimal_cash_opt))
+            self.label_output_maximal_cash_opt.setText(str("%.8f" % self._maximal_cash_opt))
+            self.label_output_streak_probability_opt.setText(str("%.2f" % (lambda x: 100 * x
+                                                                           )(self._streak_probability_opt) + " %"))
         else:
             self.label_output_lost_bet_opt.setText("--")
             self.label_output_risk_serie_opt.setText("--")
@@ -91,32 +99,35 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         print("DEBUG : on entre dans DiceCalculator::check_inputs()")
         message = ""
         test = True
-        if self.__cash == 0:
+        if self._cash == 0:
             message += "La trésorerie ne peut pas être nulle pour pouvoir jouer...\n"
             test = False
-        if self.__bet == 0 or self.__bet > self.__cash:
+        if self._bet == 0 or self._bet > self._cash:
             message += "Le montant du pari ne peut ni être nul, ni supérieur à la trésorerie disponible...\n"
             test = False
-        if self.__wished_dices == 0:
+        if self._wished_dices == 0:
             message += "Le nombre de dés à jouer ne peut pas être égal à zéro...\n"
             test = False
-        if self.__choosen_method == "":
+        if self._choosen_method == "":
             message += "Avant de lancer les calculs, il vous faut choisir une des quatre méthodes proposées...\n"
             test = False
-        if self.__choosen_method == "Risque de la série négative" and self.__probability_in_row == 0:
+        if self._choosen_method == "Risque de la série négative" and self._probability_in_row == 0:
             message += "Le risque de la série négative est incorrect (division par zéro...)\n"
             test = False
-        if self.__choosen_method == "Nombre de paris perdus à la suite" and self.__black_in_row <= 1:
-            message += "La martingale géométrique ne peut être calculée que pour des séries de deux paris perdants ou plus...\n"
+        if self._choosen_method == "Nombre de paris perdus à la suite" and self._black_in_row <= 1:
+            message += "La martingale géométrique ne peut être calculée que pour des séries " \
+                       "de deux paris perdants ou plus...\n"
             test = False
-        if self.__choosen_method == "Augmentation des mises en cas de pari perdu" and self.__increase_decrease_on_loss <= 1:
-            message += "La valeur saisie dans l'augmentation des mises n'est pas cohérente avec la mise en place d'une martingale géométrique...\n"
+        if self._choosen_method == "Augmentation des mises en cas de pari perdu" and \
+                        self._increase_decrease_on_loss <= 1:
+            message += "La valeur saisie dans l'augmentation des mises n'est pas cohérente avec la mise en place " \
+                       "d'une martingale géométrique...\n"
             test = False
-        if self.__choosen_method == "Probabilité maximale de l'échec de la martingale":
-            if self.__bankruptcy_probability == 0:
+        if self._choosen_method == "Probabilité maximale de l'échec de la martingale":
+            if self._bankruptcy_probability == 0:
                 message += "La probabilité de l'échec de la stratégie ne peut pas être nulle...\n"
                 test = False
-            if self.__bankruptcy_probability == 1:
+            if self._bankruptcy_probability == 1:
                 message += "Choisir une probabilité d'échec de la stratégie égale à 1 est définitivement stupide...\n"
                 test = False
         if not test:
@@ -124,6 +135,22 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         print("DEBUG : on sort de DiceCalculator::check_inputs()")
         return test
         
+    @pyqtSlot('QString')
+    def currency_changed(self, string):
+        """Ce SLOT est activé lorsque l'utilisateur change de monnaie dans le combobox.
+        Il s'agit alors d'ajuster la précision des double_spin_box de la trésorerie et des paris, de façon à ce que les
+        incréments correspondent à la "force" des monnaies choisies"""
+        
+        print("DEBUG : on entre dans le SLOT currency_changed")
+        self._currency = string
+        # Mise à jour de la précision du spinbox de la trésorerie
+        self.update_cash_precision()
+        self.spinBox_precision_input_cash.setValue(self._cash_precision_spinbox)
+        # signal valueChanged est déclenché et le slot precision_changed se charge des modification sur les spinboxes.
+        self.update_bet_precision()
+        self.spinBox_precision_input_bet.setValue(self._bet_precision_spinbox)
+        # signal valueChanged est déclenché et le slot precision_changed se charge des modification sur les spinboxes.
+        print("DEBUG : on sort du SLOT currency_changed")
 
     @pyqtSlot()
     def compute_expectation(self):
@@ -321,10 +348,6 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         
         self.__black_in_row_selected = self.spinBoxBlockNumberBet.value()
         self.labelIncreaseOnlossMAX.setText("-- Mettre à jour --")
-
-    @pyqtSlot()
-    def currency_changed(self):
-        pass
     
     @pyqtSlot()
     def precision_changed(self):
