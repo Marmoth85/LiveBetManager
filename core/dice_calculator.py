@@ -29,6 +29,7 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         self._streak_probability, self._streak_probability_opt = 0., 0.
         
         self.currency_changed("Bitcoin")
+        self.precision_changed()
         
     def load_input_data(self):
         """Cette méthode récupère les informations depuis l'IHM pour les stocker dans les attributs d'objets,
@@ -152,6 +153,24 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         # signal valueChanged est déclenché et le slot precision_changed se charge des modification sur les spinboxes.
         print("DEBUG : on sort du SLOT currency_changed")
 
+    @pyqtSlot()
+    def precision_changed(self):
+        """Ce SLOT est déclenché lorsque l'un des spinBox de précision est modifié. Il sert à modifier les incréments
+        par défaut des spinbox d'entrée, de façon à pouvoir cliquer sur up et down un nombre restreint de fois."""
+        
+        print("DEBUG : On entre dans le SLOT DiceCalculator::precision_changed()")
+        self.doubleSpinBox_input_cash.setSingleStep(10 ** self.spinBox_precision_input_cash.value())
+        self.doubleSpinBox_input_bet.setSingleStep(10 ** self.spinBox_precision_input_bet.value())
+        self.doubleSpinBox_input_proba_event.setSingleStep(10 ** self.spinBox_precision_input_proba_event.value())
+        self.doubleSpinBox_input_payout.setSingleStep(10 ** self.spinBox_precision_input_payout.value())
+        self.spinBox_input_dice_number.setSingleStep(10 ** self.spinBox_precision_input_dice_number.value())
+        self.spinBox_risk_serie.setSingleStep(10 ** self.spinBox_precision_risk_serie.value())
+        self.spinBox_streak_serie.setSingleStep(10 ** self.spinBox_precision_streak_serie.value())
+        self.doubleSpinBox_increase_bet.setSingleStep(10 ** self.spinBox_precision_increase_bet.value())
+        self.doubleSpinBox_bankruptcy_probability.setSingleStep(10 **
+                                                                self.spinBox_precision_bankruptcy_probability.value())
+        print("DEBUG : On sort du SLOT DiceCalculator::precision_changed()")
+        
     @pyqtSlot()
     def compute_expectation(self):
         """Cette méthode est un SLOT déclenché par le bouton "Calculer".
@@ -348,7 +367,3 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         
         self.__black_in_row_selected = self.spinBoxBlockNumberBet.value()
         self.labelIncreaseOnlossMAX.setText("-- Mettre à jour --")
-    
-    @pyqtSlot()
-    def precision_changed(self):
-        pass

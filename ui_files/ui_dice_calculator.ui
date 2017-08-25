@@ -164,6 +164,9 @@
      <property name="maximum">
       <number>5</number>
      </property>
+     <property name="value">
+      <number>-4</number>
+     </property>
     </widget>
    </item>
    <item row="8" column="1">
@@ -264,7 +267,7 @@
    <item row="7" column="3">
     <widget class="QSpinBox" name="spinBox_precision_input_proba_event">
      <property name="minimum">
-      <number>-8</number>
+      <number>-4</number>
      </property>
      <property name="maximum">
       <number>5</number>
@@ -274,7 +277,7 @@
    <item row="8" column="3">
     <widget class="QSpinBox" name="spinBox_precision_input_payout">
      <property name="minimum">
-      <number>-8</number>
+      <number>-4</number>
      </property>
      <property name="maximum">
       <number>5</number>
@@ -284,47 +287,53 @@
    <item row="10" column="3">
     <widget class="QSpinBox" name="spinBox_precision_risk_serie">
      <property name="minimum">
-      <number>-8</number>
+      <number>0</number>
      </property>
      <property name="maximum">
       <number>5</number>
+     </property>
+     <property name="value">
+      <number>2</number>
      </property>
     </widget>
    </item>
    <item row="9" column="3">
     <widget class="QSpinBox" name="spinBox_precision_input_dice_number">
      <property name="minimum">
-      <number>-8</number>
+      <number>0</number>
      </property>
      <property name="maximum">
       <number>5</number>
+     </property>
+     <property name="value">
+      <number>2</number>
      </property>
     </widget>
    </item>
    <item row="12" column="3">
     <widget class="QSpinBox" name="spinBox_precision_increase_bet">
      <property name="minimum">
-      <number>-8</number>
+      <number>-4</number>
      </property>
      <property name="maximum">
-      <number>5</number>
+      <number>8</number>
      </property>
     </widget>
    </item>
    <item row="13" column="3">
     <widget class="QSpinBox" name="spinBox_precision_bankruptcy_probability">
      <property name="minimum">
-      <number>-8</number>
+      <number>-2</number>
      </property>
      <property name="maximum">
-      <number>5</number>
+      <number>2</number>
      </property>
     </widget>
    </item>
    <item row="11" column="3">
     <widget class="QSpinBox" name="spinBox_precision_streak_serie">
      <property name="minimum">
-      <number>-8</number>
+      <number>0</number>
      </property>
      <property name="maximum">
       <number>5</number>
@@ -437,6 +446,9 @@
      </property>
      <property name="maximum">
       <number>5</number>
+     </property>
+     <property name="value">
+      <number>-8</number>
      </property>
     </widget>
    </item>
