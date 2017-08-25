@@ -226,12 +226,11 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
     def compute_bankruptcy_risk_method(self):
         print("Compute bankruptcy risk method")
     
-    def compute_streak_goal(self):
-        """Calcule le nombre de coups perdants associé au risque concédé"""
-        
-        n_bets_max_th = log(1.0 / self.__black_risk) / log(1 - self.__event_probability)
-        self.__black_in_row_expected = ceil(n_bets_max_th)
-        self.__probability_in_row_expected = int(1 / pow(1 - self.__event_probability, self.__black_in_row_expected))
+    def compute_streak_event_probability(self, n_streak):
+        """Calcule la probabilité que n_streak paris perdus consécutifs surviennent"""
+        print("DEBUG : On entre dans la méthode DiceCalculator::compute_streak_event_probability")
+        self._computed_risk_serie = (1 - self._event_probability) ** n_streak
+        print("DEBUG : On sort de la méthode DiceCalculator::compute_streak_event_probability")
 
     def compute_increase_on_loss_goal(self, vector):
         """Calcule le coefficient multiplicateur de mise quand on perd un pari"""
