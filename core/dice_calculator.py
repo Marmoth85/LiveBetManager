@@ -277,25 +277,22 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         self.__practical_cash_optimal = ceil(100000000 * self.__practical_cash_optimal) / 100000000
         self.__black_in_row_selected = self.__black_in_row_computed
     
-    def compute_inequality(self, vector, method):
+    def compute_inequality(self, vector, n_streak):
         """Dans cette méthode, on calcule l'inéquation qui nous assure de ne pas faire de pertes lorsque,
-        après n-1 paris perdants consécutifs, le n-ième est gagnant. L'idée en est qu'on récupère alors la somme des
-        mises en jeu sur les n paris concerné, éventuellement avec bénéfices, mais pas forcément."""
-
+        après n_streak paris perdants consécutifs, le suivant est gagnant. L'idée en est qu'on récupère alors la somme
+        des mises en jeu sur les n paris concerné, éventuellement avec bénéfices, mais pas forcément."""
+        
+        print("DEBUG : On entre dans la méthode DiceCalculator::compute_inequality()")
         val_condition = [0.] * len(vector)
-        if method == "theoretical":
-            lost_bet = self.__black_in_row_expected
-        else:
-            lost_bet = self.__black_in_row_computed
         for i in range(len(vector)):
             if vector[i] != 1:
-                val_condition[i] = pow(vector[i], lost_bet) * (1 - self.__payout + self.__payout / vector[i]) - 1
+                val_condition[i] = (vector[i] ** (n_streak + 1)) * (1 - self._payout + self._payout / vector[i]) - 1
                 if val_condition[i] < -1e10:
                     val_condition[i+1:] = [-1e+11] * (len(vector) - i)
                     break
             else:
                 val_condition[i] = 1
-
+        print("DEBUG : On sort de la méthode DiceCalculator::compute_inequality()")
         return val_condition
     
     def find_minimal_coefficient_index(self, values):
