@@ -69,9 +69,9 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
                                                                      )(self._maximal_increase_bet) + " %"))
         self.label_output_minimal_cash.setText(str("%.8f" % self._minimal_cash))
         self.label_output_maximal_cash.setText(str("%.8f" % self._maximal_cash))
-        self.label_output_streak_probability.setText(str("%.2f" % (lambda x: 100 * x)(self.__treak_probability) + " %"))
+        self.label_output_streak_probability.setText(str("%.2f" % (lambda x: 100 * x)(self._streak_probability) + " %"))
         
-        if self.__choosen_method == "Probabilité maximale de l'échec de la martingale":
+        if self._choosen_method == "Probabilité maximale de l'échec de la martingale":
             self.label_output_lost_bet_opt.setText(str(self._computed_lost_bet_opt))
             self.label_output_risk_serie_opt.setText(str((lambda x: int(1 / x) if x != 0 else 0.0
                                                           )(self._computed_risk_serie_opt)))
@@ -177,25 +177,34 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         On calcule les paramètres théoriques souhaités ainsi que ceux, pragmatiques, quand la trésorerie réelle ne
         correspond pas à ce que nous voudrions sur un plan purement théorique."""
 
-        print("DEBUG : on entre dans DiceCalculator::compute_expectation()")
+        print("DEBUG : on entre dans le SLOT DiceCalculator::compute_expectation()")
         self.load_input_data()
 
         if self.check_inputs():
             # Tester le choix de la méthode
+            if self._choosen_method == "Risque de la série négative":
+                self.compute_risk_serie_method()
+            elif self._choosen_method == "Nombre de paris perdus à la suite":
+                self.compute_streak_serie_method()
+            elif self._choosen_method == "Augmentation des mises en cas de pari perdu":
+                self.compute_increase_bet_method()
+            elif self._choosen_method == "Probabilité maximale de l'échec de la martingale":
+                self.compute_bankruptcy_risk_method()
             # Appeler la procédure correspondante
             self.update_result_data()
-        print("DEBUG : on sort de DiceCalculator::compute_expectation()")
+        print("DEBUG : on sort du SLOT DiceCalculator::compute_expectation()")
 
     def display_input_error_message(self, message):
         print("DEBUG : on entre dans DiceCalculator::display_input_error_message()")
         QMessageBox.critical(self, "Erreur dans les paramètres d'entrée", message)
         print("DEBUG : on sort de DiceCalculator::display_input_error_message()")
 
-    def compute_lose_in_tow_method(self):
+    def compute_risk_serie_method(self):
         """Cette méthode calcule les paramètres théoriques souhaités ainsi que ceux, pragmatiques, quand la trésorerie
         réelle ne correspond pas à ce que nous voudrions sur un plan purement théorique."""
     
-        self.load_input_data()
+        print("Compute risk_serie_method")
+        """self.load_input_data()
     
         vector_coefficient = np.linspace(1, 1.0 / pow(1 - self.__event_probability, 5),
                                          100 * int(1.0 / pow(1 - self.__event_probability, 5)) + 1)
@@ -206,8 +215,17 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
     
         self.compute_streak_practical()
         self.compute_increase_on_loss_practical(vector_coefficient)
-        self.compute_cash_practical()
+        self.compute_cash_practical()"""
         
+    def compute_streak_serie_method(self):
+        print("Compute streak serie method")
+    
+    def compute_increase_bet_method(self):
+        print("Compute increase bet method")
+    
+    def compute_bankruptcy_risk_method(self):
+        print("Compute bankruptcy risk method")
+    
     def compute_streak_goal(self):
         """Calcule le nombre de coups perdants associé au risque concédé"""
         
