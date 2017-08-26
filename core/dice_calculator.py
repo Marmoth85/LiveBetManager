@@ -235,7 +235,7 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         possible_values = np.linspace(1, 1.0 / (1 - self._event_probability) ** 5,
                                       100 * int(1.0 / (1 - self._event_probability) ** 5) + 1)
         computed_expression = self.compute_inequality(possible_values, self._computed_lost_bet)
-        self.calculate_minimal_increase_factor(computed_expression)
+        self.calculate_minimal_increase_factor(possible_values, computed_expression)
         self.calculate_maximal_increase_factor(0.00001, self._computed_lost_bet)
         self._minimal_cash = self.calculate_cash(self._minimal_increase_bet, self._computed_lost_bet)
         self._maximal_cash = self.calculate_cash(self._maximal_increase_bet, self._computed_lost_bet)
@@ -313,18 +313,18 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         print("DEBUG : On sort de la méthode DiceCalculator::compute_inequality()")
         return val_condition
     
-    def calculate_minimal_increase_factor(self, values):
+    def calculate_minimal_increase_factor(self, values, inequality):
         """Cette méthode sert à trouver le plus petit facteur multiplicateur de mise pour lequel
         l'inéquation est vérifiée."""
 
         print("DEBUG : On entre dans la méthode DiceCalculator::calculate_minimal_increase_factor")
         index = 0
-        for i in range(len(values)):
-            if values[i] <= 0:
+        for i in range(len(inequality)):
+            if inequality[i] <= 0:
                 index = i
                 break
         self._minimal_increase_bet = values[index]
-        print("DEBUG : On sort de la méthode DiceCalculator::calculate_minimal_increase_factor()")
+        print("DEBUG : On sort de la méthode DiceCalculator::calculate_minimal_increase_factor")
         
     def calculate_maximal_increase_factor(self, precision, n_streak):
         """Cette méthode sert à calculer le meilleur coefficient multiplicateur de mise en cas de pari perdu.
