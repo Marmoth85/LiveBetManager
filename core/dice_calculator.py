@@ -238,12 +238,12 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         val = self.compute_inequality(vector, "theoretical")
         self.__goal_multiply = vector[self.find_minimal_coefficient_index(val)]
      
-    def calculate_cash(self, reason):
+    def calculate_cash(self, reason, n_streak):
         """Calcule la trésorerie nécessaire pour encaisser les n_streak paris perdants consécutifs pour un facteur
         d'augmentation des mises en cas de paris perdu donné par la variable reason"""
         
         print("DEBUG : On entre dans la méthode DiceCalculator::calculate_cash()")
-        cash = self._bet * (1 - reason ** (self._computed_lost_bet + 1)) / (1 - reason)
+        cash = self._bet * (1 - reason ** (n_streak + 1)) / (1 - reason)
         cash = ceil(100000000 * cash) / 100000000
         print("DEBUG : On sort de la méthode DiceCalculator::calculate_cash()")
         return cash
@@ -310,35 +310,29 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         self._minimal_increase_bet = values[index]
         print("DEBUG : On sort de la méthode DiceCalculator::calculate_minimal_increase_factor()")
         
-    def dichotomy(self, precision, method):
+    def calculate_maximal_increase_factor(self, precision, n_streak):
         """Cette méthode sert à calculer le meilleur coefficient multiplicateur de mise en cas de pari perdu.
-        Meilleur au sens de nos attentes, et elles peuvent être multiples. Deux cas sont prévus ici: utiliser un
-        nombre préconiser de paris perdants consécutifs maximal et en déduire par dichotomie les meilleur
-        coefficient de mise associé.
-        Ou au contraire, utiliser un nombre de paris perdants consécutifs bien déterminé par l'utilisateur et du
-        coup, calculer pour ce nombre, le meilleur coefficient multiplicateur de mises."""
+        Meilleur au sens de nos attentes, et elles peuvent être multiples. Ainsi, suivant nos objectifs basés sur le
+        nombre de paris perdants consécutifs, on en déduit par dichotomie le meilleur coefficient de mise associé."""
         
-        number_bet = 0
+        print("DEBUG : On entre dans la méthode DiceCalculator::calculate_maximal_increase_factor")
         iteration = 0
         borne_inf = 1
-        borne_sup = 1.0 / pow((1 - self.__event_probability), 5)
+        borne_sup = 1.0 / (1 - self._event_probability) ** 5
         multiply_test = 1
-        if method == "lost bets max":
-            number_bet = self.__black_in_row_computed
-        elif method == "fixated lost bets":
-            number_bet = self.__black_in_row_selected
         while iteration <= 1000000 and borne_sup - borne_inf > precision:
             iteration += 1
             multiply_test = (borne_inf + borne_sup) / 2.0
-            cash = self.__bet * (1 - pow(multiply_test, number_bet)) / (1 - multiply_test)
-            if cash < self.__cash:
+            cash = self.calculate_cash(multiply_test, n_streak)
+            if cash < self._cash:
                 borne_inf = multiply_test
-                value = self.__bet * (1 - pow(borne_sup, number_bet)) / (1 - borne_sup)
-                if value < self.__cash:
+                value = self.calculate_cash(borne_sup, n_streak)
+                if value < self._cash:
                     borne_sup *= 1.1
             else:
                 borne_sup = multiply_test
-        return multiply_test
+        self._maximal_increase_bet = multiply_test
+        print("DEBUG : On sort de la méthode DiceCalculator::calculate_maximal_increase_factor")
     
     def calculate_probability_of_streak(self, n_streak):
         """Dans cette méthode, on calcule la probabilité, pour n_streak tirages consécutifs, que notre scénario
