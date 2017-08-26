@@ -226,11 +226,11 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
     def compute_bankruptcy_risk_method(self):
         print("Compute bankruptcy risk method")
     
-    def compute_streak_event_probability(self, n_streak):
+    def calculate_streak_event_probability(self, n_streak):
         """Calcule la probabilité que n_streak paris perdus consécutifs surviennent"""
-        print("DEBUG : On entre dans la méthode DiceCalculator::compute_streak_event_probability")
+        print("DEBUG : On entre dans la méthode DiceCalculator::calculate_streak_event_probability")
         self._computed_risk_serie = (1 - self._event_probability) ** n_streak
-        print("DEBUG : On sort de la méthode DiceCalculator::compute_streak_event_probability")
+        print("DEBUG : On sort de la méthode DiceCalculator::calculate_streak_event_probability")
 
     def compute_increase_on_loss_goal(self, vector):
         """Calcule le coefficient multiplicateur de mise quand on perd un pari"""
@@ -238,14 +238,14 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         val = self.compute_inequality(vector, "theoretical")
         self.__goal_multiply = vector[self.find_minimal_coefficient_index(val)]
      
-    def compute_cash(self, reason):
+    def calculate_cash(self, reason):
         """Calcule la trésorerie nécessaire pour encaisser les n_streak paris perdants consécutifs pour un facteur
         d'augmentation des mises en cas de paris perdu donné par la variable reason"""
         
-        print("DEBUG : On entre dans la méthode DiceCalculator::compute_cash()")
+        print("DEBUG : On entre dans la méthode DiceCalculator::calculate_cash()")
         cash = self._bet * (1 - reason ** (self._computed_lost_bet + 1)) / (1 - reason)
         cash = ceil(100000000 * cash) / 100000000
-        print("DEBUG : On sort de la méthode DiceCalculator::compute_cash()")
+        print("DEBUG : On sort de la méthode DiceCalculator::calculate_cash()")
         return cash
 
     def compute_streak_practical(self):
@@ -297,16 +297,18 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         print("DEBUG : On sort de la méthode DiceCalculator::compute_inequality()")
         return val_condition
     
-    def find_minimal_coefficient_index(self, values):
-        """C'est plus une petite fonction utilitaire qu'une méthode à proprement parler.
-        Elle sert juste à trouver le premier indice pour lequel notre inéquation est vérifiée."""
+    def calculate_minimal_increase_factor(self, values):
+        """Cette méthode sert à trouver le plus petit facteur multiplicateur de mise pour lequel
+        l'inéquation est vérifiée."""
 
+        print("DEBUG : On entre dans la méthode DiceCalculator::calculate_minimal_increase_factor")
         index = 0
         for i in range(len(values)):
             if values[i] <= 0:
                 index = i
                 break
-        return index
+        self._minimal_increase_bet = values[index]
+        print("DEBUG : On sort de la méthode DiceCalculator::calculate_minimal_increase_factor()")
         
     def dichotomy(self, precision, method):
         """Cette méthode sert à calculer le meilleur coefficient multiplicateur de mise en cas de pari perdu.
