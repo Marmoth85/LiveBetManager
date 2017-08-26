@@ -239,7 +239,7 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         self.calculate_maximal_increase_factor(0.00001, self._computed_lost_bet)
         self._minimal_cash = self.calculate_cash(self._minimal_increase_bet, self._computed_lost_bet)
         self._maximal_cash = self.calculate_cash(self._maximal_increase_bet, self._computed_lost_bet)
-        self.calculate_probability_of_streak(self._computed_lost_bet)
+        self._streak_probability = self.calculate_probability_of_streak(self._computed_lost_bet)
         print("DEBUG : On sort de la méthode DiceCalculator::compute_everything_from_streak_number")
     
     def calculate_streak_event_probability(self, n_streak):
