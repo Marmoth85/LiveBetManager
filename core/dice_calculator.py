@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QMessageBox
 from PyQt5.QtCore import pyqtSlot
 
-from math import log, ceil, pow, floor
+from math import log, ceil, floor
 import numpy as np
 
 from gen_files import ui_dice_calculator
@@ -200,10 +200,15 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         print("DEBUG : on sort de DiceCalculator::display_input_error_message()")
 
     def compute_risk_serie_method(self):
-        """Cette méthode calcule les paramètres théoriques souhaités ainsi que ceux, pragmatiques, quand la trésorerie
-        réelle ne correspond pas à ce que nous voudrions sur un plan purement théorique."""
+        """Cette méthode lance les calculs basé sur notre stratégie fournie en entrée à partir du nombre de paris
+        perdus consécutifs, nombre calculé à partir de la probabilité des N paris perdus consécutifs, fournie par
+        l'utilisateur."""
     
-        print("Compute risk_serie_method")
+        print("DEBUG : On entre dans la méthode DiceCalculator::compute_risk_serie_method")
+        # Calculer le N_Streak
+        self._computed_lost_bet = 1 + int(log(self._probability_in_row) / log(1 - self._event_probability))
+        # On lance les calculs à partir du N_Streak
+        self.compute_everything_from_streak_number()
         """self.load_input_data()
     
         vector_coefficient = np.linspace(1, 1.0 / pow(1 - self.__event_probability, 5),
@@ -216,8 +221,12 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         self.compute_streak_practical()
         self.compute_increase_on_loss_practical(vector_coefficient)
         self.compute_cash_practical()"""
+        print("DEBUG : On sort de la méthode DiceCalculator::compute_risk_serie_method")
         
     def compute_streak_serie_method(self):
+        """Cette méthode lance les calculs basé sur notre stratégie fournie en entrée à partir du nombre de paris
+        perdus consécutifs, nombre fourni par l'utilisateur."""
+        
         print("DEBUG : On entre dans la méthode DiceCalculator::compute_streak_serie_method")
         self._computed_lost_bet = self._black_in_row
         self.compute_everything_from_streak_number()
@@ -230,6 +239,15 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         print("Compute bankruptcy risk method")
         
     def compute_everything_from_streak_number(self):
+        """A partir du nombre de paris perdants consécutifs (calculé au préalable ou fourni par l'utilisateur), cette
+        méthode calcule les paramètres suivants:
+            - Probabilité des N paris perdants consécutifs
+            - Facteur minimal d'augmentation des mises quand un pari est perdu
+            - Facteur maximal d'augmentation des mises quand un pari est perdu
+            - La trésorerie minimale nécessitée par la stratégie, basée sur le facteur minimal d'augmentation des mises
+            - La trésorerie maximale nécessitée par la stratégie, basée sur le facteur maximal d'augmentation des mises.
+            - La probabilité d'échec de la stratégie en fonction des K paris perdants consécutifs parmi N paris."""
+        
         print("DEBUG : On entre dans la méthode DiceCalculator::compute_everything_from_streak_number")
         self.calculate_streak_event_probability(self._computed_lost_bet)
         possible_values = np.linspace(1, 1.0 / (1 - self._event_probability) ** 5,
