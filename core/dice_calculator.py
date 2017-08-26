@@ -190,7 +190,6 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
                 self.compute_increase_bet_method()
             elif self._choosen_method == "Probabilité maximale de l'échec de la martingale":
                 self.compute_bankruptcy_risk_method()
-            # Appeler la procédure correspondante
             self.update_result_data()
         print("DEBUG : on sort du SLOT DiceCalculator::compute_expectation()")
 
@@ -233,7 +232,12 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         print("DEBUG : On sort de la méthode DiceCalculator::compute_increase_bet_method")
     
     def compute_bankruptcy_risk_method(self):
-        print("Compute bankruptcy risk method")
+
+        print("DEBUG : On entre dans la méthode DiceCalculator::compute_bankruptcy_risk_method")
+        self.calculate_streak_from_bankruptcy_risk()
+        self.compute_everything_from_streak_number()
+        # calculs empiriques basés sur la trésorerie disponible?
+        print("DEBUG : On sort de la méthode DiceCalculator::compute_bankruptcy_risk_method")
         
     def compute_everything_from_streak_number(self):
         """A partir du nombre de paris perdants consécutifs (calculé au préalable ou fourni par l'utilisateur), cette
@@ -315,15 +319,19 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         borne_inf = 1
         borne_sup = 1.0 / (1 - self._event_probability) ** 5
         multiply_test = 1
+        while iteration < 1000000 and self.calculate_cash(borne_sup, n_streak) < self._cash:
+            iteration += 1
+            borne_sup *= 1.1
+            print(str("Modification de la borne sup : itération = %i") % iteration)
+        iteration = 0
         while iteration <= 1000000 and borne_sup - borne_inf > precision:
             iteration += 1
             multiply_test = (borne_inf + borne_sup) / 2.0
             cash = self.calculate_cash(multiply_test, n_streak)
+            print(str("La valeur du cash est de %.8f") % cash)
+            print(str("La valeur du facteur testé est de %.5f") % multiply_test)
             if cash < self._cash:
                 borne_inf = multiply_test
-                value = self.calculate_cash(borne_sup, n_streak)
-                if value < self._cash:
-                    borne_sup *= 1.1
             else:
                 borne_sup = multiply_test
         self._maximal_increase_bet = multiply_test
@@ -349,3 +357,24 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
             memo[i] = result
         print("DEBUG : On sort de la méthode DiceCalculator::calculate_probability_of_streak")
         return memo[num_coins]
+
+    def calculate_streak_from_bankruptcy_risk(self):
+        """Dans cette méthode on calcule le N_streak optimal qui satisfait au risque maximal de banqueroute fixé par
+        l'utilisateur et aux autres paramètres fournis en entrée."""
+        
+        print("DEBUG : On entre dans la méthode DiceCalculator::calculate_streak_from_bankruptcy_risk")
+        streak_min = 1
+        streak_max = 10
+        proba = self._bankruptcy_probability
+        while self.calculate_probability_of_streak(streak_max) > proba:
+            streak_max *= 2
+        counter = 0
+        while counter < 1000000 and streak_max - streak_min > 1:
+            streak_test = int((streak_min + streak_max) / 2)
+            counter += 1
+            if self.calculate_probability_of_streak(streak_test) >= proba:
+                streak_min = streak_test
+            else:
+                streak_max = streak_test
+        print("DEBUG : On sort de la méthode DiceCalculator::calculate_streak_from_bankruptcy_risk")
+        self._computed_lost_bet = streak_max
