@@ -218,13 +218,29 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         self.compute_cash_practical()"""
         
     def compute_streak_serie_method(self):
-        print("Compute streak serie method")
+        print("DEBUG : On entre dans la méthode DiceCalculator::compute_streak_serie_method")
+        self._computed_lost_bet = self._black_in_row
+        self.compute_everything_from_streak_number()
+        print("DEBUG : On sort de la méthode DiceCalculator::compute_streak_serie_method")
     
     def compute_increase_bet_method(self):
         print("Compute increase bet method")
     
     def compute_bankruptcy_risk_method(self):
         print("Compute bankruptcy risk method")
+        
+    def compute_everything_from_streak_number(self):
+        print("DEBUG : On entre dans la méthode DiceCalculator::compute_everything_from_streak_number")
+        self.calculate_streak_event_probability(self._computed_lost_bet)
+        possible_values = np.linspace(1, 1.0 / (1 - self._event_probability) ** 5,
+                                      100 * int(1.0 / (1 - self._event_probability) ** 5) + 1)
+        computed_expression = self.compute_inequality(possible_values, self._computed_lost_bet)
+        self.calculate_minimal_increase_factor(computed_expression)
+        self.calculate_maximal_increase_factor(0.00001, self._computed_lost_bet)
+        self._minimal_cash = self.calculate_cash(self._minimal_increase_bet, self._computed_lost_bet)
+        self._maximal_cash = self.calculate_cash(self._maximal_increase_bet, self._computed_lost_bet)
+        self.calculate_probability_of_streak(self._computed_lost_bet)
+        print("DEBUG : On sort de la méthode DiceCalculator::compute_everything_from_streak_number")
     
     def calculate_streak_event_probability(self, n_streak):
         """Calcule la probabilité que n_streak paris perdus consécutifs surviennent"""
