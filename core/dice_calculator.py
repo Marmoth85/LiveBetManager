@@ -200,7 +200,7 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         print("DEBUG : on sort de DiceCalculator::display_input_error_message()")
 
     def compute_risk_serie_method(self):
-        """Cette méthode lance les calculs basé sur notre stratégie fournie en entrée à partir du nombre de paris
+        """Cette méthode lance les calculs basés sur notre stratégie fournie en entrée à partir du nombre de paris
         perdus consécutifs, nombre calculé à partir de la probabilité des N paris perdus consécutifs, fournie par
         l'utilisateur."""
     
@@ -209,22 +209,10 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         self._computed_lost_bet = 1 + int(log(self._probability_in_row) / log(1 - self._event_probability))
         # On lance les calculs à partir du N_Streak
         self.compute_everything_from_streak_number()
-        """self.load_input_data()
-    
-        vector_coefficient = np.linspace(1, 1.0 / pow(1 - self.__event_probability, 5),
-                                         100 * int(1.0 / pow(1 - self.__event_probability, 5)) + 1)
-    
-        self.compute_streak_goal()
-        self.compute_increase_on_loss_goal(vector_coefficient)
-        self.compute_cash_goal()
-    
-        self.compute_streak_practical()
-        self.compute_increase_on_loss_practical(vector_coefficient)
-        self.compute_cash_practical()"""
         print("DEBUG : On sort de la méthode DiceCalculator::compute_risk_serie_method")
         
     def compute_streak_serie_method(self):
-        """Cette méthode lance les calculs basé sur notre stratégie fournie en entrée à partir du nombre de paris
+        """Cette méthode lance les calculs basés sur notre stratégie fournie en entrée à partir du nombre de paris
         perdus consécutifs, nombre fourni par l'utilisateur."""
         
         print("DEBUG : On entre dans la méthode DiceCalculator::compute_streak_serie_method")
@@ -233,7 +221,16 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         print("DEBUG : On sort de la méthode DiceCalculator::compute_streak_serie_method")
     
     def compute_increase_bet_method(self):
-        print("Compute increase bet method")
+        """Cette méthode lance les calculs basés sur notre stratégie fournie en entrée à partir de l'augmentation
+        des mises en cas de paris perdus, valeur fournie par l'utilisateur."""
+        
+        print("DEBUG : On entre dans la méthode DiceCalculator::compute_increase_bet_method")
+        # Calcul du N_Streak
+        self._computed_lost_bet = - 1 + int(log(1 + self._cash / self._bet * (self._increase_decrease_on_loss - 1)) /
+                                            log(self._increase_decrease_on_loss))
+        # Lancement des calculs à partir du N_Streak
+        self.compute_everything_from_streak_number()
+        print("DEBUG : On sort de la méthode DiceCalculator::compute_increase_bet_method")
     
     def compute_bankruptcy_risk_method(self):
         print("Compute bankruptcy risk method")
@@ -262,15 +259,10 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
     
     def calculate_streak_event_probability(self, n_streak):
         """Calcule la probabilité que n_streak paris perdus consécutifs surviennent"""
+        
         print("DEBUG : On entre dans la méthode DiceCalculator::calculate_streak_event_probability")
         self._computed_risk_serie = (1 - self._event_probability) ** n_streak
         print("DEBUG : On sort de la méthode DiceCalculator::calculate_streak_event_probability")
-
-    def compute_increase_on_loss_goal(self, vector):
-        """Calcule le coefficient multiplicateur de mise quand on perd un pari"""
-        
-        val = self.compute_inequality(vector, "theoretical")
-        self.__goal_multiply = vector[self.find_minimal_coefficient_index(val)]
      
     def calculate_cash(self, reason, n_streak):
         """Calcule la trésorerie nécessaire pour encaisser les n_streak paris perdants consécutifs pour un facteur
@@ -281,37 +273,6 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         cash = ceil(100000000 * cash) / 100000000
         print("DEBUG : On sort de la méthode DiceCalculator::calculate_cash()")
         return cash
-
-    def compute_streak_practical(self):
-        """Calcule le nombre de coups perdants associé au risque pratique (lié au manque de cash) concédé"""
-
-        self.__black_in_row_computed = int(
-            log(self.__cash / self.__bet * (self.__goal_multiply - 1) + 1) / log(self.__goal_multiply))
-        self.__probability_in_row_computed = int(1 / pow(1 - self.__event_probability, self.__black_in_row_computed))
-
-    def compute_increase_on_loss_practical(self, vector):
-        """Calcule les coefficients multiplicateurs de mise quand on perd un pari:
-        le minimum possible pour utiliser le moins de cash possible en cas de banqueroute
-        et le maximum possible pour utiliser l'intégralité de la trésorerie disponible pour un risque donné."""
-
-        value = self.compute_inequality(vector, "practical")
-        self.__practical_multiply_min = vector[self.find_minimal_coefficient_index(value)]
-        self.__practical_multiply_max = float(floor(10000 * self.dichotomy(0.00001, "lost bets max"))) / 10000
-
-    def compute_cash_practical(self):
-        """Calcule la trésorerie nécessaire pour encaisser les n coups perdants de suite calculés dans deux cas
-        possibles. D'abord dans le cas où on augmente les mises avec un coefficient le plus faible possible pour
-        conserver le maximum de cash possible en cas de bust, puis le contraire, à savoir, avec le coefficient le
-        plus gros possible, de sorte à utiliser l'intégralité du cash ou presque pour le même risque concédé."""
-
-        self.__practical_cash = self.__bet * (
-            1 - pow(self.__practical_multiply_min, self.__black_in_row_computed)) / (1 - self.__practical_multiply_min)
-        self.__practical_cash = ceil(100000000 * self.__practical_cash) / 100000000
-
-        self.__practical_cash_optimal = self.__bet * (
-            1 - pow(self.__practical_multiply_max, self.__black_in_row_computed)) / (1 - self.__practical_multiply_max)
-        self.__practical_cash_optimal = ceil(100000000 * self.__practical_cash_optimal) / 100000000
-        self.__black_in_row_selected = self.__black_in_row_computed
     
     def compute_inequality(self, vector, n_streak):
         """Dans cette méthode, on calcule l'inéquation qui nous assure de ne pas faire de pertes lorsque,
@@ -388,28 +349,3 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
             memo[i] = result
         print("DEBUG : On sort de la méthode DiceCalculator::calculate_probability_of_streak")
         return memo[num_coins]
-    
-    @pyqtSlot()
-    def update_bankruptcy_display(self):
-        """Ce SLOT sert à retirer les précédents calculs de l'affichage en raison de modification(s) dans les
-        paramètres d'entrée. Ainsi, on invite l'utilisateur à ne pas prendre de décision trop hâtive et donc à
-        relancer le calcul de la probabilité de banqueroute en n'oubliant pas les dernières modifications."""
-        
-        self.labelOutputBankruptcyRisk.setText("-- Mettre à jour --")
-
-    @pyqtSlot()
-    def maximize_increase_on_loss(self):
-        """Ce SLOT sert à calculer le plus gros coefficient d'increase de mise possible pour un nombre de paris
-        perdants consécutifs défini par l'utilisateur."""
-        
-        value = self.dichotomy(0.00001, "fixated lost bets")
-        self.labelIncreaseOnlossMAX.setText(str("%.4f" % value))
-
-    @pyqtSlot()
-    def update_n_break(self):
-        """Ce SLOT est déclenché par le spinBox de blocage du nombre de loss in row.
-        Il sert à explicitement demander à l'utilisateur de recalculer le coefficient multiplicateur de mises étant
-        donné la modification d'un des paramètres d'entrée de la stratégie."""
-        
-        self.__black_in_row_selected = self.spinBoxBlockNumberBet.value()
-        self.labelIncreaseOnlossMAX.setText("-- Mettre à jour --")
