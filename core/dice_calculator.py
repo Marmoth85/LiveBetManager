@@ -71,26 +71,17 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         self.label_output_maximal_cash.setText(str("%.8f" % self._maximal_cash))
         self.label_output_streak_probability.setText(str("%.2f" % (lambda x: 100 * x)(self._streak_probability) + " %"))
         
-        if self._choosen_method == "Probabilité maximale de l'échec de la martingale":
-            self.label_output_lost_bet_opt.setText(str(self._computed_lost_bet_opt))
-            self.label_output_risk_serie_opt.setText(str((lambda x: int(1 / x) if x != 0 else 0.0
-                                                          )(self._computed_risk_serie_opt)))
-            self.label_output_minimal_increase_bet_opt.setText(str("%.2f" % (lambda x: (x - 1) * 100
-                                                                             )(self._minimal_increase_bet_opt) + " %"))
-            self.label_output_maximal_increase_bet_opt.setText(str("%.2f" % (lambda x: (x - 1) * 100
-                                                                             )(self._maximal_increase_bet_opt) + " %"))
-            self.label_output_minimal_cash_opt.setText(str("%.8f" % self._minimal_cash_opt))
-            self.label_output_maximal_cash_opt.setText(str("%.8f" % self._maximal_cash_opt))
-            self.label_output_streak_probability_opt.setText(str("%.2f" % (lambda x: 100 * x
-                                                                           )(self._streak_probability_opt) + " %"))
-        else:
-            self.label_output_lost_bet_opt.setText("--")
-            self.label_output_risk_serie_opt.setText("--")
-            self.label_output_minimal_increase_bet_opt.setText("--")
-            self.label_output_maximal_increase_bet_opt.setText("--")
-            self.label_output_minimal_cash_opt.setText("--")
-            self.label_output_maximal_cash_opt.setText("--")
-            self.label_output_streak_probability_opt.setText("--")
+        self.label_output_lost_bet_opt.setText(str(self._computed_lost_bet_opt))
+        self.label_output_risk_serie_opt.setText(str((lambda x: int(1 / x) if x != 0 else 0.0
+                                                      )(self._computed_risk_serie_opt)))
+        self.label_output_minimal_increase_bet_opt.setText(str("%.2f" % (lambda x: (x - 1) * 100
+                                                                         )(self._minimal_increase_bet_opt) + " %"))
+        self.label_output_maximal_increase_bet_opt.setText(str("%.2f" % (lambda x: (x - 1) * 100
+                                                                         )(self._maximal_increase_bet_opt) + " %"))
+        self.label_output_minimal_cash_opt.setText(str("%.8f" % self._minimal_cash_opt))
+        self.label_output_maximal_cash_opt.setText(str("%.8f" % self._maximal_cash_opt))
+        self.label_output_streak_probability_opt.setText(str("%.2f" % (lambda x: 100 * x
+                                                                       )(self._streak_probability_opt) + " %"))
         print("DEBUG : on sort de DiceCalculator::update_result_data()")
 
     def check_inputs(self):
@@ -190,6 +181,7 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
                 self.compute_increase_bet_method()
             elif self._choosen_method == "Probabilité maximale de l'échec de la martingale":
                 self.compute_bankruptcy_risk_method()
+            self.compute_cash_method()
             self.update_result_data()
         print("DEBUG : on sort du SLOT DiceCalculator::compute_expectation()")
 
@@ -259,6 +251,8 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         self._minimal_cash = self.calculate_cash(self._minimal_increase_bet, self._computed_lost_bet)
         self._maximal_cash = self.calculate_cash(self._maximal_increase_bet, self._computed_lost_bet)
         self._streak_probability = self.calculate_probability_of_streak(self._computed_lost_bet)
+        # Si on est logique, il faudrait faire ce calcul sur self._computed_lost_bet + 1... à vérifier!!!
+        # Dans le doute, on garde ce calcul, qui est le plus prudent... Ne pas prendre de risques inutiles!
         print("DEBUG : On sort de la méthode DiceCalculator::compute_everything_from_streak_number")
     
     def calculate_streak_event_probability(self, n_streak):
@@ -378,3 +372,25 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
                 streak_max = streak_test
         print("DEBUG : On sort de la méthode DiceCalculator::calculate_streak_from_bankruptcy_risk")
         self._computed_lost_bet = streak_max
+
+    def switch_results(self):
+        self._computed_lost_bet, self._computed_lost_bet_opt = self._computed_lost_bet_opt, self._computed_lost_bet
+        self._computed_risk_serie, self._computed_risk_serie_opt = self._computed_risk_serie_opt, \
+                                                                   self._computed_risk_serie
+        self._minimal_increase_bet, self._minimal_increase_bet_opt = self._minimal_increase_bet_opt, \
+                                                                     self._minimal_increase_bet
+        self._maximal_increase_bet, self._maximal_increase_bet_opt = self._maximal_increase_bet_opt, \
+                                                                     self._maximal_increase_bet
+        self._minimal_cash, self._minimal_cash_opt = self._minimal_cash_opt, self._minimal_cash
+        self._maximal_cash, self._maximal_cash_opt = self._maximal_cash_opt, self._maximal_cash
+        self._streak_probability, self._streak_probability_opt = self._streak_probability_opt, self._streak_probability
+
+    def compute_cash_method(self):
+        self.switch_results()
+        self._increase_decrease_on_loss = 1 + 1 / ((1 / self._event_probability) - 1)
+        print(self._increase_decrease_on_loss)
+        self.compute_increase_bet_method()
+        while self._minimal_cash > self._cash:
+            self._computed_lost_bet -= 1
+            self.compute_everything_from_streak_number()
+        self.switch_results()
