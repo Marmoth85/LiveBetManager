@@ -183,6 +183,7 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
                 self.compute_bankruptcy_risk_method()
             self.compute_cash_method()
             self.update_result_data()
+            self.check_results()
         print("DEBUG : on sort du SLOT DiceCalculator::compute_expectation()")
 
     def display_input_error_message(self, message):
@@ -370,10 +371,14 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
                 streak_min = streak_test
             else:
                 streak_max = streak_test
-        print("DEBUG : On sort de la méthode DiceCalculator::calculate_streak_from_bankruptcy_risk")
         self._computed_lost_bet = streak_max
+        print("DEBUG : On sort de la méthode DiceCalculator::calculate_streak_from_bankruptcy_risk")
 
     def switch_results(self):
+        """Cette méthode sert juste à échanger les résultats le contenu des variables utilisées dans les méthodes
+        pour les mettre dans les variables *_opt"""
+        
+        print("DEBUG : On entre dans la méthode DiceSimulator::switch_results")
         self._computed_lost_bet, self._computed_lost_bet_opt = self._computed_lost_bet_opt, self._computed_lost_bet
         self._computed_risk_serie, self._computed_risk_serie_opt = self._computed_risk_serie_opt, \
                                                                    self._computed_risk_serie
@@ -384,13 +389,51 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         self._minimal_cash, self._minimal_cash_opt = self._minimal_cash_opt, self._minimal_cash
         self._maximal_cash, self._maximal_cash_opt = self._maximal_cash_opt, self._maximal_cash
         self._streak_probability, self._streak_probability_opt = self._streak_probability_opt, self._streak_probability
+        print("DEBUG : On sort de la méthode DiceSimulator::switch_results")
 
     def compute_cash_method(self):
+        """Cette méthode s'ajoute aux quatre précédentes. Il s'agit de calculer une stratégie pragmatique correcte
+        en tenant compte du pari de base et surtout de la trésorerie disponible.
+        """
+        
+        print("DEBUG : On entre dans la méthode DiceCalculator::compute_cash_method")
+        # On stocke les précédents résultats dans les variables "*_opt"
         self.switch_results()
+        # On approxime le pourcentage de départ pour lancer la méthode basée sur l'augmentation des mises
         self._increase_decrease_on_loss = 1 + 1 / ((1 / self._event_probability) - 1)
         print(self._increase_decrease_on_loss)
         self.compute_increase_bet_method()
+        # Il arrive que le pourcentage approché précédemment sous-estime le pourcentage minimal possible
+        # Par conséquent on réajuste les résultat en diminuant le streak précédemment obtenu
         while self._minimal_cash > self._cash:
             self._computed_lost_bet -= 1
             self.compute_everything_from_streak_number()
+        # On redispose les anciens résultats dans les bonnes variables et les nouveaux dans les variables *_.opt
         self.switch_results()
+        print("DEBUG : On sort de la méthode DiceCalculator::compute_cahs_method")
+        
+    def check_results(self):
+        """Cette méthode vérifie que les résultats sont cohérents et logiques... si ce n'est pas le cas, cela signifie
+        que l'algorithme n'abouti pas à un résultat satisfaisant en raison des paramètres d'entrée saisis...
+        Une fenêtre informative s'ouvre donc pour informer l'utilisateur et donner des leviers pour déboucher sur
+        une stratégie qui puisse être cohérente."""
+        
+        print("DEBUG : On entre dans la méthode DiceCalculator::check_result")
+        if self._maximal_cash < self._minimal_cash:
+            message = str("Veuillez remarquer que les résultats obtenus ne sont pas cohérents: le facteur "
+                          "multiplicateur de mises minimal est plus grand que les facteur maximal, ce qui est un non "
+                          "sens total. Même problème pour la trésorerie nécessaire.\n\n"
+                          "Cela provient du fait que les paramètres d'entrée que vous avez fourni ne permettent pas "
+                          "de construire une stratégie intéressante et viable.\n\n "
+                          "Plusieurs solutions s'offrent à vous pour pallier à cette issue : \n"
+                          "   - Réduire le montant du pari de base,\n"
+                          "   - Réduire le nombre de dés souhaités,\n"
+                          "   - Augmenter la probabilité maximale de banqueroute,\n"
+                          "   - Réduire la probabilité de la série noire souhaitée,\n"
+                          "   - Réduire le nombre de paris perdants consécutifs,\n"
+                          "   - Augmenter le pourcentage d'augmentation des mises en cas de paris perdus,\n"
+                          "   - Peut-être plusieurs de ces facteurs à la fois si le coeur vous en dit :)\n\n"
+                          "Bonne chance! :)")
+
+            QMessageBox.information(self, "Attention aux résultats obtenus!", message)
+        print("DEBUG : On sort de la méthode DiceCalculator::check_result")
