@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QMessageBox
 from PyQt5.QtCore import pyqtSlot
 
-from math import log, ceil, floor
+from math import log, ceil
 import numpy as np
 
 from gen_files import ui_dice_calculator
@@ -251,7 +251,7 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         self.calculate_maximal_increase_factor(0.00001, self._computed_lost_bet)
         self._minimal_cash = self.calculate_cash(self._minimal_increase_bet, self._computed_lost_bet)
         self._maximal_cash = self.calculate_cash(self._maximal_increase_bet, self._computed_lost_bet)
-        self._streak_probability = self.calculate_probability_of_streak(self._computed_lost_bet)
+        self._streak_probability = self.calculate_probability_of_streak(self._computed_lost_bet + 1)
         # Si on est logique, il faudrait faire ce calcul sur self._computed_lost_bet + 1... à vérifier!!!
         # Dans le doute, on garde ce calcul, qui est le plus prudent... Ne pas prendre de risques inutiles!
         print("DEBUG : On sort de la méthode DiceCalculator::compute_everything_from_streak_number")
@@ -361,13 +361,13 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         streak_min = 1
         streak_max = 10
         proba = self._bankruptcy_probability
-        while self.calculate_probability_of_streak(streak_max) > proba:
+        while self.calculate_probability_of_streak(streak_max + 1) > proba:
             streak_max *= 2
         counter = 0
         while counter < 1000000 and streak_max - streak_min > 1:
             streak_test = int((streak_min + streak_max) / 2)
             counter += 1
-            if self.calculate_probability_of_streak(streak_test) >= proba:
+            if self.calculate_probability_of_streak(streak_test + 1) >= proba:
                 streak_min = streak_test
             else:
                 streak_max = streak_test
