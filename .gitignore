@@ -1,3 +1,4 @@
 *.py[oc]
 gen_files/[A-Za-z0-9]*.py
 *.exe
+*.xlsx

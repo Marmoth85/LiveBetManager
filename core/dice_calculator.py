@@ -145,6 +145,7 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         print("DEBUG : on sort du SLOT currency_changed")
 
     @pyqtSlot()
+    @pyqtSlot(int)
     def precision_changed(self):
         """Ce SLOT est déclenché lorsque l'un des spinBox de précision est modifié. Il sert à modifier les incréments
         par défaut des spinbox d'entrée, de façon à pouvoir cliquer sur up et down un nombre restreint de fois."""

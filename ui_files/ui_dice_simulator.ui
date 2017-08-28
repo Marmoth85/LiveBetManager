@@ -7,240 +7,96 @@
     <x>0</x>
     <y>0</y>
     <width>1000</width>
-    <height>771</height>
+    <height>750</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="11" column="0" colspan="2">
-    <widget class="QLabel" name="labelTheoreticalResults">
-     <property name="font">
-      <font>
-       <pointsize>16</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Résultats escomptés</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="1">
-    <widget class="QLabel" name="labelOutputLostBetGoal">
-     <property name="text">
-      <string>--</string>
-     </property>
-    </widget>
-   </item>
-   <item row="22" column="0">
-    <widget class="QLabel" name="labelPracticalCash">
-     <property name="text">
-      <string>Trésorerie nécessaire (Min - Max) :</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="21" column="0">
-    <widget class="QLabel" name="labelPracticalLostBet">
-     <property name="text">
-      <string>Paris perdus consécutifs correspondants :</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="16" column="0">
-    <widget class="QLabel" name="labelMultiplyGoal">
-     <property name="text">
-      <string>Multiplicateur minimal de mise des paris perdus recouvrant les pertes :</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="23" column="0">
-    <widget class="QLabel" name="labelPracticalMultiply">
-     <property name="text">
-      <string>Multiplicateur de mise à utiliser (Min - Max) :</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_Cash">
-     <property name="decimals">
-      <number>8</number>
+   <item row="6" column="3">
+    <widget class="QSpinBox" name="spinBox_precision_input_bet">
+     <property name="minimum">
+      <number>-8</number>
      </property>
      <property name="maximum">
-      <double>999999999999.000000000000000</double>
+      <number>5</number>
      </property>
-     <property name="singleStep">
-      <double>0.000010000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="27" column="0" colspan="2">
-    <widget class="QLabel" name="labelBankruptcy">
-     <property name="font">
-      <font>
-       <pointsize>16</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Risque de Banqueroute</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+     <property name="value">
+      <number>-8</number>
      </property>
     </widget>
    </item>
    <item row="13" column="0">
-    <widget class="QLabel" name="labelBlackRiskGoal">
+    <widget class="QRadioButton" name="radioButton_lose_bet_base">
      <property name="text">
-      <string>Risque de série noire empirique accepté vérifiant la contrainte : 1 chance sur ...</string>
+      <string>Pari perdu : retour au pari de base</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_input_cash">
+     <property name="text">
+      <string>Trésorerie à disposition :</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="23" column="1">
-    <widget class="QLabel" name="labelOutputPracticalMultiply">
+   <item row="22" column="1">
+    <widget class="QLabel" name="label_output_benefits_win">
      <property name="text">
       <string>--</string>
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="labelProba">
-     <property name="text">
-      <string>Probabilité de réalisation de l'évènement suivi en %:</string>
+   <item row="7" column="1">
+    <widget class="QDoubleSpinBox" name="doubleSpinBox_input_proba_event">
+     <property name="locale">
+      <locale language="English" country="UnitedStates"/>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     <property name="decimals">
+      <number>4</number>
      </property>
-    </widget>
-   </item>
-   <item row="21" column="1">
-    <widget class="QLabel" name="labelOutputPracticalLostBet">
-     <property name="text">
-      <string>--</string>
+     <property name="minimum">
+      <double>0.000000000000000</double>
      </property>
-    </widget>
-   </item>
-   <item row="29" column="1">
-    <widget class="QSpinBox" name="spinBoxDiceNumber">
      <property name="maximum">
-      <number>1000000</number>
-     </property>
-     <property name="singleStep">
-      <number>100</number>
+      <double>100.000000000000000</double>
      </property>
      <property name="value">
-      <number>100</number>
+      <double>50.000000000000000</double>
      </property>
     </widget>
    </item>
-   <item row="26" column="0" colspan="2">
-    <spacer name="horizontalSpacer_4">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>30</width>
-       <height>15</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="19" column="0" colspan="2">
-    <spacer name="horizontalSpacer_7">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>10</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="10" column="0" colspan="2">
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>30</width>
-       <height>15</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="20" column="0">
-    <widget class="QLabel" name="labelPracticalRisk">
+   <item row="12" column="0">
+    <widget class="QRadioButton" name="radioButton_win_modify_bet">
      <property name="text">
-      <string>Risque de série noire empirique : 1 chance sur ...</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <string>Pari gagné : modifier la mise de +/- (%) :</string>
      </property>
     </widget>
    </item>
-   <item row="31" column="0" colspan="2">
-    <widget class="QPushButton" name="pushButtonCalculateRisk">
+   <item row="17" column="0" colspan="4">
+    <widget class="QPushButton" name="pushButton_simulate">
      <property name="font">
       <font>
        <pointsize>10</pointsize>
       </font>
      </property>
      <property name="text">
-      <string>Calcul du risque</string>
+      <string>Simuler</string>
      </property>
     </widget>
    </item>
-   <item row="12" column="0" colspan="2">
-    <spacer name="horizontalSpacer_6">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+   <item row="8" column="1">
+    <widget class="QDoubleSpinBox" name="doubleSpinBox_input_payout">
+     <property name="locale">
+      <locale language="English" country="UnitedStates"/>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>10</height>
-      </size>
+     <property name="decimals">
+      <number>4</number>
      </property>
-    </spacer>
-   </item>
-   <item row="15" column="0">
-    <widget class="QLabel" name="labelCashGoal">
-     <property name="text">
-      <string>Trésorerie nécessaire pour satisfaire ce risque maximal :</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="1">
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_Payout">
      <property name="maximum">
       <double>100000000.000000000000000</double>
      </property>
@@ -252,18 +108,103 @@
      </property>
     </widget>
    </item>
-   <item row="29" column="0">
-    <widget class="QLabel" name="labelDiceNumber">
+   <item row="6" column="2">
+    <widget class="QLabel" name="label_precision_input_bet">
      <property name="text">
-      <string>Nombre de lancés de dés souhaités : </string>
+      <string>Précision de l'incrément : 10^ </string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="labelBet">
+   <item row="5" column="3">
+    <widget class="QSpinBox" name="spinBox_precision_input_cash">
+     <property name="minimum">
+      <number>-8</number>
+     </property>
+     <property name="maximum">
+      <number>5</number>
+     </property>
+     <property name="value">
+      <number>-4</number>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QDoubleSpinBox" name="doubleSpinBox_input_bet">
+     <property name="locale">
+      <locale language="English" country="UnitedStates"/>
+     </property>
+     <property name="decimals">
+      <number>8</number>
+     </property>
+     <property name="maximum">
+      <double>99999999999.000000000000000</double>
+     </property>
+     <property name="singleStep">
+      <double>0.000001000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="label_input_proba_event">
+     <property name="text">
+      <string>Probabilité de l'évènement joué en % :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QDoubleSpinBox" name="doubleSpinBox_input_cash">
+     <property name="locale">
+      <locale language="English" country="UnitedStates"/>
+     </property>
+     <property name="decimals">
+      <number>8</number>
+     </property>
+     <property name="maximum">
+      <double>999999999999.000000000000000</double>
+     </property>
+     <property name="singleStep">
+      <double>0.000010000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="22" column="0">
+    <widget class="QLabel" name="label_benefits_win">
+     <property name="text">
+      <string>Gains moyens par réussite :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="3">
+    <widget class="QSpinBox" name="spinBox_precision_input_proba_event">
+     <property name="minimum">
+      <number>-4</number>
+     </property>
+     <property name="maximum">
+      <number>5</number>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="3">
+    <widget class="QSpinBox" name="spinBox_precision_input_payout">
+     <property name="minimum">
+      <number>-4</number>
+     </property>
+     <property name="maximum">
+      <number>5</number>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_input_bet">
      <property name="text">
       <string>Montant d'un paris :</string>
      </property>
@@ -272,22 +213,285 @@
      </property>
     </widget>
    </item>
+   <item row="12" column="3">
+    <widget class="QSpinBox" name="spinBox_precision_win_bet">
+     <property name="minimum">
+      <number>0</number>
+     </property>
+     <property name="maximum">
+      <number>5</number>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="3">
+    <widget class="QSpinBox" name="spinBox_precision_lose_bet">
+     <property name="minimum">
+      <number>-2</number>
+     </property>
+     <property name="maximum">
+      <number>2</number>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="4">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>30</width>
+       <height>15</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="20" column="0" colspan="4">
+    <spacer name="horizontalSpacer_4">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QLabel" name="label_currency">
+     <property name="text">
+      <string>Monnaie utilisée :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2" colspan="2">
+    <widget class="QComboBox" name="comboBox_input_currency">
+     <item>
+      <property name="text">
+       <string>Bitcoin</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Ethereum</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Litecoin</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Burst</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Dogecoin</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Euro</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Dollar</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="8" column="0">
+    <widget class="QLabel" name="label_input_payout">
+     <property name="text">
+      <string>Facteur de gain (côte) en cas de victoire :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="26" column="0" colspan="2">
+    <widget class="QLabel" name="label_mean_streak">
+     <property name="text">
+      <string>Nombre moyen de paris perdus séparant deux paris gagnants :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="22" column="2">
+    <widget class="QLabel" name="label_deficits_lose">
+     <property name="text">
+      <string>Pertes moyennes par échec :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="21" column="3">
+    <widget class="QLabel" name="label_output_lost_strategies">
+     <property name="text">
+      <string>--</string>
+     </property>
+    </widget>
+   </item>
+   <item row="22" column="3">
+    <widget class="QLabel" name="label_output_deficits_lose">
+     <property name="text">
+      <string>--</string>
+     </property>
+    </widget>
+   </item>
+   <item row="26" column="2" colspan="2">
+    <widget class="QLabel" name="label_output_mean_streak">
+     <property name="text">
+      <string>--</string>
+     </property>
+    </widget>
+   </item>
+   <item row="15" column="2">
+    <widget class="QLabel" name="label_precision_input_dice_number">
+     <property name="text">
+      <string>Précision de l'incrément : 10^ </string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="16" column="0">
+    <widget class="QLabel" name="label_input_simulation">
+     <property name="text">
+      <string>Nombre de simulations souhaitées :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="16" column="2">
+    <widget class="QLabel" name="label_precision_simulation">
+     <property name="text">
+      <string>Précision de l'incrément : 10^ </string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="16" column="1">
+    <widget class="QSpinBox" name="spinBox_simulation">
+     <property name="maximum">
+      <number>50000</number>
+     </property>
+     <property name="value">
+      <number>500</number>
+     </property>
+    </widget>
+   </item>
+   <item row="16" column="3">
+    <widget class="QSpinBox" name="spinBox_precision_simulation">
+     <property name="maximum">
+      <number>4</number>
+     </property>
+     <property name="value">
+      <number>2</number>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="0" colspan="4">
+    <widget class="QRadioButton" name="radioButton_win_bet_base">
+     <property name="text">
+      <string>Pari gagné : retour au pari de base</string>
+     </property>
+    </widget>
+   </item>
+   <item row="15" column="3">
+    <widget class="QSpinBox" name="spinBox_precision_input_dice_number">
+     <property name="minimum">
+      <number>0</number>
+     </property>
+     <property name="maximum">
+      <number>5</number>
+     </property>
+     <property name="value">
+      <number>2</number>
+     </property>
+    </widget>
+   </item>
    <item row="15" column="1">
-    <widget class="QLabel" name="labelOutputCashGoal">
-     <property name="text">
-      <string>--</string>
+    <widget class="QSpinBox" name="spinBox_input_dice_number">
+     <property name="maximum">
+      <number>1000000</number>
+     </property>
+     <property name="singleStep">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>500</number>
      </property>
     </widget>
    </item>
-   <item row="22" column="1">
-    <widget class="QLabel" name="labelOutputPracticalCash">
+   <item row="15" column="0">
+    <widget class="QLabel" name="label_input_dice_number">
      <property name="text">
-      <string>--</string>
+      <string>Nombre de lancés de dés souhaités : </string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="2">
-    <widget class="QLabel" name="labelInputs">
+   <item row="12" column="1">
+    <widget class="QDoubleSpinBox" name="doubleSpinBox_win_bet">
+     <property name="locale">
+      <locale language="English" country="UnitedStates"/>
+     </property>
+     <property name="decimals">
+      <number>4</number>
+     </property>
+     <property name="minimum">
+      <double>-1000000000.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>1000000000.000000000000000</double>
+     </property>
+     <property name="value">
+      <double>0.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="1">
+    <widget class="QDoubleSpinBox" name="doubleSpinBox_lose_bet">
+     <property name="locale">
+      <locale language="English" country="UnitedStates"/>
+     </property>
+     <property name="decimals">
+      <number>4</number>
+     </property>
+     <property name="minimum">
+      <double>-1000000000.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>1000000000.000000000000000</double>
+     </property>
+     <property name="value">
+      <double>0.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="4">
+    <widget class="QLabel" name="label_inputs">
      <property name="font">
       <font>
        <pointsize>16</pointsize>
@@ -303,64 +507,8 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="2">
-    <spacer name="horizontalSpacer_5">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>10</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="18" column="0" colspan="2">
-    <widget class="QLabel" name="labelPracticallyResults">
-     <property name="font">
-      <font>
-       <pointsize>16</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>En pratique</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1">
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_Proba">
-     <property name="decimals">
-      <number>4</number>
-     </property>
-     <property name="minimum">
-      <double>0.000000000000000</double>
-     </property>
-     <property name="maximum">
-      <double>100.000000000000000</double>
-     </property>
-     <property name="value">
-      <double>50.000000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="labelPayout">
-     <property name="text">
-      <string>Facteur de gain (côte) en cas de victoire :</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="2">
-    <widget class="QLabel" name="labelMainTitle">
+   <item row="0" column="0" colspan="4">
+    <widget class="QLabel" name="label_main_title">
      <property name="font">
       <font>
        <pointsize>20</pointsize>
@@ -376,72 +524,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="labelCash">
-     <property name="text">
-      <string>Trésorerie à disposition :</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="30" column="0" colspan="2">
-    <widget class="QLabel" name="labelOutputBankruptcyRisk">
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-       <weight>75</weight>
-       <italic>false</italic>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>-- Mettre à jour --</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="2">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>30</width>
-       <height>15</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="13" column="1">
-    <widget class="QLabel" name="labelOutputBlackRiskGoal">
-     <property name="text">
-      <string>--</string>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="0">
-    <widget class="QLabel" name="labelLostBetGoal">
-     <property name="text">
-      <string>Nombre de paris perdants consécutifs correspondants :</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="20" column="1">
-    <widget class="QLabel" name="labelOutputPracticalRisk">
-     <property name="text">
-      <string>--</string>
-     </property>
-    </widget>
-   </item>
-   <item row="17" column="0" colspan="2">
+   <item row="18" column="0" colspan="4">
     <spacer name="horizontalSpacer_3">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -454,51 +537,42 @@
      </property>
     </spacer>
    </item>
-   <item row="16" column="1">
-    <widget class="QLabel" name="labelOutputMultiplyGoal">
+   <item row="19" column="0" colspan="4">
+    <widget class="QLabel" name="label_results">
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="text">
-      <string>--</string>
+      <string>Résultats</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="labelBlackRisk">
+   <item row="5" column="2">
+    <widget class="QLabel" name="label_precision_input_cash">
      <property name="text">
-      <string>Risque de série noire accepté : maximum 1 chance sur ...</string>
+      <string>Précision de l'incrément : 10^ </string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="8" column="1">
-    <widget class="QSpinBox" name="spinBoxBlackRisk">
-     <property name="maximum">
-      <number>1000000000</number>
-     </property>
-     <property name="singleStep">
-      <number>100</number>
-     </property>
-     <property name="value">
-      <number>1000</number>
+   <item row="14" column="0">
+    <widget class="QRadioButton" name="radioButton_lose_modify_bet">
+     <property name="text">
+      <string>Pari perdu : modifier la mise de +/- (%) :</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_Bet">
-     <property name="decimals">
-      <number>8</number>
-     </property>
-     <property name="maximum">
-      <double>99999999999.000000000000000</double>
-     </property>
-     <property name="singleStep">
-      <double>0.000001000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="28" column="0" colspan="2">
-    <spacer name="horizontalSpacer_8">
+   <item row="3" column="0" colspan="4">
+    <spacer name="horizontalSpacer_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -510,54 +584,333 @@
      </property>
     </spacer>
    </item>
-   <item row="9" column="0" colspan="2">
-    <widget class="QPushButton" name="pushButtonCalculateParameters">
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
+   <item row="21" column="1">
+    <widget class="QLabel" name="label_output_won_strategies">
      <property name="text">
-      <string>Calculer</string>
+      <string>--</string>
      </property>
     </widget>
    </item>
-   <item row="24" column="0">
-    <widget class="QLabel" name="labelBlockBetNumber">
+   <item row="21" column="0">
+    <widget class="QLabel" name="label_won_strategies">
      <property name="text">
-      <string>Bloquer le nombre de paris perdants consécutifs à :</string>
+      <string>Part de réussites de la stratégie simulée :</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="24" column="1">
-    <widget class="QSpinBox" name="spinBoxBlockNumberBet">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>999999999</number>
-     </property>
-    </widget>
-   </item>
-   <item row="25" column="0">
-    <widget class="QPushButton" name="pushButtonIncreaseOnLossMAX">
+   <item row="24" column="0" colspan="2">
+    <widget class="QLabel" name="label_global_result">
      <property name="text">
-      <string>Maximiser le coefficient d'increase on loss</string>
+      <string>Rentabilité moyenne de la stratégie simulée :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="25" column="1">
-    <widget class="QLabel" name="labelIncreaseOnlossMAX">
+   <item row="24" column="2" colspan="2">
+    <widget class="QLabel" name="label_output_global_result">
      <property name="text">
       <string>--</string>
      </property>
     </widget>
    </item>
+   <item row="8" column="2">
+    <widget class="QLabel" name="label_precision_input_payout">
+     <property name="text">
+      <string>Précision de l'incrément : 10^ </string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="2">
+    <widget class="QLabel" name="label_precision_input_proba_event">
+     <property name="text">
+      <string>Précision de l'incrément : 10^ </string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="2">
+    <widget class="QLabel" name="label_precision_lose_bet">
+     <property name="text">
+      <string>Précision de l'incrément : 10^ </string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="2">
+    <widget class="QLabel" name="label_precision_win_bet">
+     <property name="text">
+      <string>Précision de l'incrément : 10^ </string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="21" column="2">
+    <widget class="QLabel" name="label_lost_strategies">
+     <property name="text">
+      <string>Part d'échecs de la stratégie simulée :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="23" column="0">
+    <widget class="QLabel" name="label_relative_benefits_win">
+     <property name="text">
+      <string>Gains relatifs moyens par réussite :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="23" column="1">
+    <widget class="QLabel" name="label_output_relative_benefits_win">
+     <property name="text">
+      <string>--</string>
+     </property>
+    </widget>
+   </item>
+   <item row="23" column="2">
+    <widget class="QLabel" name="label_relative_deficits">
+     <property name="text">
+      <string>Pertes relatives moyennes par réussite :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="23" column="3">
+    <widget class="QLabel" name="label_output_relative_deficits">
+     <property name="text">
+      <string>--</string>
+     </property>
+    </widget>
+   </item>
+   <item row="25" column="2" colspan="2">
+    <widget class="QLabel" name="label_output_relative_global_result">
+     <property name="text">
+      <string>--</string>
+     </property>
+    </widget>
+   </item>
+   <item row="25" column="0" colspan="2">
+    <widget class="QLabel" name="label_relative_global_result">
+     <property name="text">
+      <string>Rentabilité relative moyenne par réussite de la stratégie simulée :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>comboBox_input_currency</tabstop>
+  <tabstop>doubleSpinBox_input_cash</tabstop>
+  <tabstop>spinBox_precision_input_cash</tabstop>
+  <tabstop>doubleSpinBox_input_bet</tabstop>
+  <tabstop>spinBox_precision_input_bet</tabstop>
+  <tabstop>doubleSpinBox_input_proba_event</tabstop>
+  <tabstop>spinBox_precision_input_proba_event</tabstop>
+  <tabstop>doubleSpinBox_input_payout</tabstop>
+  <tabstop>spinBox_precision_input_payout</tabstop>
+  <tabstop>radioButton_win_bet_base</tabstop>
+  <tabstop>radioButton_win_modify_bet</tabstop>
+  <tabstop>doubleSpinBox_win_bet</tabstop>
+  <tabstop>spinBox_precision_win_bet</tabstop>
+  <tabstop>radioButton_lose_bet_base</tabstop>
+  <tabstop>radioButton_lose_modify_bet</tabstop>
+  <tabstop>doubleSpinBox_lose_bet</tabstop>
+  <tabstop>spinBox_precision_lose_bet</tabstop>
+  <tabstop>spinBox_input_dice_number</tabstop>
+  <tabstop>spinBox_precision_input_dice_number</tabstop>
+  <tabstop>spinBox_simulation</tabstop>
+  <tabstop>spinBox_precision_simulation</tabstop>
+  <tabstop>pushButton_simulate</tabstop>
+ </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton_simulate</sender>
+   <signal>clicked()</signal>
+   <receiver>DiceSimulator</receiver>
+   <slot>compute_simulation()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>488</x>
+     <y>448</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>125</x>
+     <y>423</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_input_currency</sender>
+   <signal>activated(QString)</signal>
+   <receiver>DiceSimulator</receiver>
+   <slot>currency_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>550</x>
+     <y>147</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>114</x>
+     <y>158</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_precision_input_cash</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>DiceSimulator</receiver>
+   <slot>precision_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>758</x>
+     <y>177</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>369</x>
+     <y>451</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_precision_input_bet</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>DiceSimulator</receiver>
+   <slot>precision_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>793</x>
+     <y>204</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>391</x>
+     <y>481</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_precision_input_proba_event</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>DiceSimulator</receiver>
+   <slot>precision_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>808</x>
+     <y>233</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>429</x>
+     <y>510</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_precision_input_payout</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>DiceSimulator</receiver>
+   <slot>precision_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>990</x>
+     <y>268</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>454</x>
+     <y>543</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_precision_input_dice_number</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>DiceSimulator</receiver>
+   <slot>precision_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>990</x>
+     <y>392</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>479</x>
+     <y>571</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_precision_win_bet</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>DiceSimulator</receiver>
+   <slot>precision_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>990</x>
+     <y>317</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>534</x>
+     <y>630</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_precision_lose_bet</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>DiceSimulator</receiver>
+   <slot>precision_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>990</x>
+     <y>366</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>592</x>
+     <y>685</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_precision_simulation</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>DiceSimulator</receiver>
+   <slot>precision_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>872</x>
+     <y>413</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>501</x>
+     <y>596</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>compute_simulation()</slot>
+  <slot>currency_changed()</slot>
+  <slot>precision_changed()</slot>
+ </slots>
 </ui>
