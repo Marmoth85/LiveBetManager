@@ -47,6 +47,24 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
         Ici, on s'assure qu'un seul radioButton ne peut être activé pour un pari gagnant et pour un pari perdant."""
 
         print("DiceSimulator: On entre dans le SLOT bet_clicked")
+        
+        def switch_button_state(button_1, button_2):
+            if button_1.isChecked():
+                button_2.setChecked(False)
+            else:
+                button_2.setChecked(True)
+                
+        sender = self.sender()
+        
+        if sender == self.radioButton_win_bet_base:
+            switch_button_state(self.radioButton_win_bet_base, self.radioButton_win_modify_bet)
+        elif sender == self.radioButton_win_modify_bet:
+            switch_button_state(self.radioButton_win_modify_bet, self.radioButton_win_bet_base)
+        elif sender == self.radioButton_lose_bet_base:
+            switch_button_state(self.radioButton_lose_bet_base, self.radioButton_lose_modify_bet)
+        elif sender == self.radioButton_lose_modify_bet:
+            switch_button_state(self.radioButton_lose_modify_bet, self.radioButton_lose_bet_base)
+        
         print("DiceSimulator: On sort du SLOT bet_clicked")
     
     def load_input_data(self):
