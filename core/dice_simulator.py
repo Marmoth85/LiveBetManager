@@ -15,12 +15,19 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
         print("DiceSimulator : On sort du le constructeur")
     
     @pyqtSlot('QString')
-    def currency_changed(self):
+    def currency_changed(self, string):
         """Ce SLOT est activé lorsque l'utilisateur change de monnaie dans le combobox.
         Il s'agit alors d'ajuster la précision des double_spin_box de la trésorerie et des paris, de façon à ce que les
         incréments correspondent à la "force" des monnaies choisies"""
         
         print("DiceSimulator: On entre dans le SLOT currency_changed")
+
+        self._currency = string
+        self.update_cash_precision()
+        self.spinBox_precision_input_cash.setValue(self._cash_precision_spinbox)
+        self.update_bet_precision()
+        self.spinBox_precision_input_bet.setValue(self._bet_precision_spinbox)
+        
         print("DiceSimulator: On sort du SLOT currency_changed")
     
     @pyqtSlot()

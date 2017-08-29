@@ -32,6 +32,12 @@
      <property name="text">
       <string>Pari perdu : retour au pari de base</string>
      </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+     <property name="autoExclusive">
+      <bool>false</bool>
+     </property>
     </widget>
    </item>
    <item row="5" column="0">
@@ -74,6 +80,9 @@
     <widget class="QRadioButton" name="radioButton_win_modify_bet">
      <property name="text">
       <string>Pari gagné : modifier la mise de +/- (%) :</string>
+     </property>
+     <property name="autoExclusive">
+      <bool>false</bool>
      </property>
     </widget>
    </item>
@@ -414,6 +423,12 @@
      <property name="text">
       <string>Pari gagné : retour au pari de base</string>
      </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+     <property name="autoExclusive">
+      <bool>false</bool>
+     </property>
     </widget>
    </item>
    <item row="15" column="3">
@@ -568,6 +583,9 @@
     <widget class="QRadioButton" name="radioButton_lose_modify_bet">
      <property name="text">
       <string>Pari perdu : modifier la mise de +/- (%) :</string>
+     </property>
+     <property name="autoExclusive">
+      <bool>false</bool>
      </property>
     </widget>
    </item>
