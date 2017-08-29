@@ -12,6 +12,9 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
         print("DiceSimulator : On entre dans le constructeur")
         super(DiceSimulator, self).__init__(parent)
         self.setupUi(self)
+
+        self.currency_changed("Bitcoin")
+        self.precision_changed()
         print("DiceSimulator : On sort du le constructeur")
     
     @pyqtSlot('QString')
@@ -37,6 +40,16 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
         par défaut des spinbox d'entrée, de façon à pouvoir cliquer sur up et down un nombre restreint de fois."""
         
         print("DiceSimulator: On entre dans le SLOT precision_changed")
+
+        self.doubleSpinBox_input_cash.setSingleStep(10 ** self.spinBox_precision_input_cash.value())
+        self.doubleSpinBox_input_bet.setSingleStep(10 ** self.spinBox_precision_input_bet.value())
+        self.doubleSpinBox_input_proba_event.setSingleStep(10 ** self.spinBox_precision_input_proba_event.value())
+        self.doubleSpinBox_input_payout.setSingleStep(10 ** self.spinBox_precision_input_payout.value())
+        self.doubleSpinBox_win_bet.setSingleStep(10 ** self.spinBox_precision_win_bet.value())
+        self.doubleSpinBox_lose_bet.setSingleStep(10 ** self.spinBox_precision_lose_bet.value())
+        self.spinBox_input_dice_number.setSingleStep(10 ** self.spinBox_precision_input_dice_number.value())
+        self.spinBox_simulation.setSingleStep(10 ** self.spinBox_precision_simulation.value())
+        
         print("DiceSimulator: On sort du SLOT precision_changed")
     
     @pyqtSlot()
