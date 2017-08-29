@@ -751,7 +751,7 @@
    <sender>pushButton_simulate</sender>
    <signal>clicked()</signal>
    <receiver>DiceSimulator</receiver>
-   <slot>compute_simulation()</slot>
+   <slot>compute_expectation()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>488</x>
@@ -907,10 +907,75 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>radioButton_win_bet_base</sender>
+   <signal>clicked()</signal>
+   <receiver>DiceSimulator</receiver>
+   <slot>bet_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>17</x>
+     <y>285</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>660</x>
+     <y>76</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_win_modify_bet</sender>
+   <signal>clicked()</signal>
+   <receiver>DiceSimulator</receiver>
+   <slot>bet_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>66</x>
+     <y>306</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>628</x>
+     <y>109</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_lose_bet_base</sender>
+   <signal>clicked()</signal>
+   <receiver>DiceSimulator</receiver>
+   <slot>bet_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>162</x>
+     <y>337</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>547</x>
+     <y>192</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_lose_modify_bet</sender>
+   <signal>clicked()</signal>
+   <receiver>DiceSimulator</receiver>
+   <slot>bet_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>117</x>
+     <y>353</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>526</x>
+     <y>244</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
-  <slot>compute_simulation()</slot>
+  <slot>compute_expectation()</slot>
   <slot>currency_changed()</slot>
   <slot>precision_changed()</slot>
+  <slot>bet_clicked()</slot>
  </slots>
 </ui>

@@ -44,6 +44,5 @@ class MainWindow(QMainWindow, ui_mainwindow.Ui_MainWindow):
         self.setCentralWidget(self.my_gambling_calculator)
         
     def show_gambling_simulator(self):
-        # calculator has to be changed by simulator later, when it will be implemented
         self.my_gambling_simulator = dice_simulator.DiceSimulator(self)
         self.setCentralWidget(self.my_gambling_simulator)
