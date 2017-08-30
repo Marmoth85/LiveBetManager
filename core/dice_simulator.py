@@ -13,6 +13,8 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
         super(DiceSimulator, self).__init__(parent)
         self.setupUi(self)
 
+        self._number_simulation = 0
+        
         self.currency_changed("Bitcoin")
         self.precision_changed()
         print("DiceSimulator : On sort du le constructeur")
@@ -92,6 +94,22 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
                 afin de pouvoir les exploiter facilement dans les calculs qui suivront."""
 
         print("DiceSimulator: On entre dans le SLOT load_input_data")
+        
+        self._cash = self.doubleSpinBox_input_cash.value()
+        self._bet = self.doubleSpinBox_input_bet.value()
+        self._event_probability = self.doubleSpinBox_input_proba_event.value() / 100
+        self._payout = self.doubleSpinBox_input_payout.value()
+        self._wished_dices = self.spinBox_input_dice_number.value()
+        self._number_simulation = self.spinBox_simulation.value()
+        self._increase_decrease_on_loss = "base"
+        self._increase_decrease_on_win = "base"
+        
+        if self.radioButton_lose_modify_bet.isChecked():
+            self._increase_decrease_on_loss = 1 + self.doubleSpinBox_lose_bet.value() / 100
+        
+        if self.radioButton_win_modify_bet.isChecked():
+            self._increase_decrease_on_win = 1 + self.doubleSpinBox_win_bet.value() / 100
+
         print("DiceSimulator: On sort du SLOT load_input_data")
 
     def update_result_data(self):
