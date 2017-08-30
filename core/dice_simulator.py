@@ -67,6 +67,17 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
         correspond pas à ce que nous voudrions sur un plan purement théorique."""
         
         print("DiceSimulator: On entre dans le SLOT compute_expectation")
+
+        if self.check_inputs():
+            self.load_input_data()
+            
+            dice_list = self.create_dice_list()
+            win_lost_dice = self.compute_win_lost_list(dice_list)
+            self.calculate_mean_lost_in_row(win_lost_dice)
+            self.compute_strategy(win_lost_dice)
+            
+            self.update_result_data()
+        
         print("DiceSimulator: On sort du SLOT compute_expectation")
         
     @pyqtSlot()
@@ -167,3 +178,15 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
             QMessageBox.critical(self, "Erreur dans les paramètres saisis!", message)
         
         print("DiceSimulator: On sort du SLOT check_inputs")
+
+    def create_dice_list(self):
+        return []
+    
+    def compute_win_lost_list(self, dice_list):
+        return []
+    
+    def calculate_mean_lost_in_row(self, dice_list):
+        pass
+    
+    def compute_strategy(self, dice_list):
+        pass
