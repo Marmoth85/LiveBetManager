@@ -16,10 +16,10 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
         self._number_simulation = 0
         
         self._result_failed_method = 0
-        self._result_global_win = 0
-        self._result_global_loss = 0
-        self._result_global = 0
-        self._result_mean_lost_bets_in_row = 0
+        self._result_global_win = 0.
+        self._result_global_loss = 0.
+        self._result_global = 0.
+        self._result_mean_lost_bets_in_row = 0.
         
         self.currency_changed("Bitcoin")
         self.precision_changed()
@@ -68,8 +68,9 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
         
         print("DiceSimulator: On entre dans le SLOT compute_expectation")
 
+        self.load_input_data()
+        
         if self.check_inputs():
-            self.load_input_data()
             
             dice_list = self.create_dice_list()
             win_lost_dice = self.compute_win_lost_list(dice_list)
@@ -134,22 +135,35 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
 
         print("DiceSimulator: On entre dans le SLOT update_result_data")
         
-        lose_part = self._result_failed_method / self._number_simulation
-        win_part = 1 - lose_part
-        self.label_output_lost_strategies.setText(str("%.2f %") % lose_part)
-        self.label_output_won_strategies.setText(str("%.2f %") % win_part)
+        lose_part = 100 * (self._result_failed_method / self._number_simulation)
+        win_part = 100 - lose_part
+        self.label_output_lost_strategies.setText(str("%.2f") % lose_part + " %")
+        self.label_output_won_strategies.setText(str("%.2f") % win_part + " %")
 
         won_strategies = self._number_simulation - self._result_failed_method
-        mean_per_won = self._result_global_win / won_strategies
-        mean_per_loss = self._result_global_loss / self._result_failed_method
-        self.label_output_benefits_win.setText(str("%.8f") % mean_per_won)
-        self.label_output_deficits_lose.setText(str("%.8f") % mean_per_loss)
-        self.label_output_relative_benefits.setText(str("%.2f %") % (lambda x: x/self._cash)(mean_per_won))
-        self.label_output_relative_deficits.setText(str("%.2f %") % (lambda x: x/self._cash)(mean_per_loss))
+        
+        if won_strategies != 0:
+            mean_per_won = self._result_global_win / won_strategies
+            self.label_output_benefits_win.setText(str("%.8f") % mean_per_won)
+            self.label_output_relative_benefits.setText(str("%.2f") %
+                                                        (lambda x: 100 * x / self._cash)(mean_per_won) + " %")
+        else:
+            self.label_output_benefits_win.setText(str("NA"))
+            self.label_output_relative_benefits.setText(str("NA"))
+            
+        if self._result_failed_method != 0:
+            mean_per_loss = self._result_global_loss / self._result_failed_method
+            self.label_output_deficits_lose.setText(str("%.8f") % mean_per_loss)
+            self.label_output_relative_deficits.setText(str("%.2f") %
+                                                        (lambda x: 100 * x / self._cash)(mean_per_loss) + " %")
+        else:
+            self.label_output_deficits_lose.setText(str("NA"))
+            self.label_output_relative_deficits.setText(str("NA"))
         
         global_result = self._result_global_win - self._result_global_loss
         self.label_output_global_result.setText(str("%.8f") % global_result)
-        self.label_output_relative_global_result.setText(str("%.2f %") % (lambda x: x/self._cash)(global_result))
+        self.label_output_relative_global_result.setText(str("%.2f") %
+                                                         (lambda x: 100 * x / self._cash)(global_result) + " %")
         
         self.label_output_mean_streak.setText(str("%.2f") % self._result_mean_lost_bets_in_row)
         
@@ -174,10 +188,15 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
             test = False
         if self._number_simulation == 0:
             message += "Le nombre de simulations à effectuer ne peut pas être nul... \n"
+            test = False
+        if self._payout <= 1:
+            message += "Le payout ne peut pas être inférieur ou égal à un... \n"
+            test = False
         if not test:
             QMessageBox.critical(self, "Erreur dans les paramètres saisis!", message)
         
         print("DiceSimulator: On sort du SLOT check_inputs")
+        return test
 
     def create_dice_list(self):
         return []

@@ -106,6 +106,9 @@
      <property name="decimals">
       <number>4</number>
      </property>
+     <property name="minimum">
+      <double>1.000000000000000</double>
+     </property>
      <property name="maximum">
       <double>100000000.000000000000000</double>
      </property>
@@ -476,7 +479,7 @@
       <number>4</number>
      </property>
      <property name="minimum">
-      <double>-1000000000.000000000000000</double>
+      <double>-100.000000000000000</double>
      </property>
      <property name="maximum">
       <double>1000000000.000000000000000</double>
@@ -495,7 +498,7 @@
       <number>4</number>
      </property>
      <property name="minimum">
-      <double>-1000000000.000000000000000</double>
+      <double>-100.000000000000000</double>
      </property>
      <property name="maximum">
       <double>1000000000.000000000000000</double>

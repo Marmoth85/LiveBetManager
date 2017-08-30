@@ -97,6 +97,9 @@ class DiceCalculator(QWidget, gambling.Gambling, ui_dice_calculator.Ui_DiceCalcu
         if self._bet == 0 or self._bet > self._cash:
             message += "Le montant du pari ne peut ni être nul, ni supérieur à la trésorerie disponible...\n"
             test = False
+        if self._payout <= 1:
+            message += "Le facteur de gain (payout) ne peut pas être inférieur ou égal à un...\n"
+            test = False
         if self._wished_dices == 0:
             message += "Le nombre de dés à jouer ne peut pas être égal à zéro...\n"
             test = False
