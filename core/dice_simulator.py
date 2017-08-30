@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QMessageBox
 from PyQt5.QtCore import pyqtSlot
 
 from gen_files import ui_dice_simulator
@@ -149,4 +149,21 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
                 Aucun calcul ne doit être lancé sans être assuré de la bonne forme des paramètres d'entrée"""
 
         print("DiceSimulator: On entre dans le SLOT check_inputs")
+
+        message = ""
+        test = True
+        if self._cash == 0:
+            message += "La trésorerie ne peut pas être nulle pour pouvoir jouer...\n"
+            test = False
+        if self._bet == 0 or self._bet > self._cash:
+            message += "Le montant du pari ne peut ni être nul, ni supérieur à la trésorerie disponible...\n"
+            test = False
+        if self._wished_dices == 0:
+            message += "Le nombre de dés à jouer ne peut pas être égal à zéro...\n"
+            test = False
+        if self._number_simulation == 0:
+            message += "Le nombre de simulations à effectuer ne peut pas être nul... \n"
+        if not test:
+            QMessageBox.critical(self, "Erreur dans les paramètres saisis!", message)
+        
         print("DiceSimulator: On sort du SLOT check_inputs")
