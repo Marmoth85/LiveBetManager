@@ -162,7 +162,7 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
             self.label_output_deficits_lose.setText(str("NA"))
             self.label_output_relative_deficits.setText(str("NA"))
         
-        global_result = self._result_global_win - self._result_global_loss
+        global_result = (self._result_global_win - self._result_global_loss) / self._number_simulation
         self.label_output_global_result.setText(str("%.8f") % global_result)
         self.label_output_relative_global_result.setText(str("%.2f") %
                                                          (lambda x: 100 * x / self._cash)(global_result) + " %")
@@ -256,6 +256,11 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
         """
         
         print("DiceSimulator: compute_strategy IN")
+        self._result_failed_method = 0
+        self._result_global_win = 0.
+        self._result_global_loss = 0.
+        self._result_global = 0.
+        
         bet_i = 0
         result = []
         
@@ -271,6 +276,7 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
                 self._result_global_loss += self._cash - cash
             result.append(cash - self._cash)
         print("DiceSimulator: compute_strategy OUT")
+        print(result)
 
     def simulate_strategy_once(self, events, bet_i):
         """
@@ -280,6 +286,60 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
         :return: une liste contenant deux valeurs: la trésorerie à la fin de la stratégie et le nombre de dés simulés.
         """
         
-        print("DiceSimulator: simulate_strategy_once IN")
-        print("DiceSimulator: simulate_strategy_once OUT")
-        return [0, self._wished_dices]
+        #print("DiceSimulator: simulate_strategy_once IN")
+        
+        cash = self._cash
+        bet = self._bet
+        number_bet = 0
+        ok = True
+        
+        for i in range(self._wished_dices):
+            #print([cash, bet, number_bet, ok])
+            [cash, bet, number_bet, ok] = self.simulate_bet(cash, bet, events, bet_i, i, number_bet, ok)
+            #print([cash, bet, number_bet, ok])
+            
+            if not ok:
+                break
+                    
+        """if ok and not events[bet_i + number_bet - 1]:
+            while not events[bet_i + number_bet - 1]:
+                number_bet += 1"""
+                
+        #print("DiceSimulator: simulate_strategy_once OUT")
+        return [cash, number_bet]
+
+    def simulate_bet(self, cash, bet, events, bet_i, i, number_bet, ok):
+        """
+        Cette méthode simule un pari et procède aux modifications sur la trésorerie, le montant du prochain pari etc.
+        :param cash: trésorerie avant le pari
+        :param bet: montant du pari à effectuer
+        :param events: liste des résultats de paris
+        :param bet_i: indice sur la liste des évènements, avant la stratégie en cours
+        :param i: indice sur la stratégie en cours
+        :param number_bet: nombre de paris passés sur la stratégie en cours
+        :param ok: état de la stratégie (en cours ou cassée)
+        :return: les résultats liés au pari: trésorerie, montant du prochain pari, nombre de paris passés et état de la
+        stratégie en cours.
+        """
+        #print("DiceSimulator: simulate_bet IN")
+        if bet <= cash:
+            number_bet += 1
+            cash -= bet
+        else:
+            ok = False
+            return [cash, bet, number_bet, ok]
+    
+        if events[bet_i + i]:
+            cash += bet * self._payout
+            if self._increase_decrease_on_win == "base":
+                bet = self._bet
+            else:
+                bet *= self._increase_decrease_on_win
+        else:
+            if self._increase_decrease_on_loss == "base":
+                bet = self._bet
+            else:
+                bet *= self._increase_decrease_on_loss
+        #print("DiceSimulator: simulate_bet OUT")
+        #print([cash, bet, number_bet, ok])
+        return[cash, bet, number_bet, ok]
