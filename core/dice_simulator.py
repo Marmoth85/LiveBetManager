@@ -15,6 +15,12 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
 
         self._number_simulation = 0
         
+        self._result_failed_method = 0
+        self._result_global_win = 0
+        self._result_global_loss = 0
+        self._result_global = 0
+        self._result_mean_lost_bets_in_row = 0
+        
         self.currency_changed("Bitcoin")
         self.precision_changed()
         print("DiceSimulator : On sort du le constructeur")
@@ -116,6 +122,26 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
         """Cette méthode récupère les résultats des calculs effectués pour les afficher dans l'IHM"""
 
         print("DiceSimulator: On entre dans le SLOT update_result_data")
+        
+        lose_part = self._result_failed_method / self._number_simulation
+        win_part = 1 - lose_part
+        self.label_output_lost_strategies.setText(str("%.2f %") % lose_part)
+        self.label_output_won_strategies.setText(str("%.2f %") % win_part)
+
+        won_strategies = self._number_simulation - self._result_failed_method
+        mean_per_won = self._result_global_win / won_strategies
+        mean_per_loss = self._result_global_loss / self._result_failed_method
+        self.label_output_benefits_win.setText(str("%.8f") % mean_per_won)
+        self.label_output_deficits_lose.setText(str("%.8f") % mean_per_loss)
+        self.label_output_relative_benefits.setText(str("%.2f %") % (lambda x: x/self._cash)(mean_per_won))
+        self.label_output_relative_deficits.setText(str("%.2f %") % (lambda x: x/self._cash)(mean_per_loss))
+        
+        global_result = self._result_global_win - self._result_global_loss
+        self.label_output_global_result.setText(str("%.8f") % global_result)
+        self.label_output_relative_global_result.setText(str("%.2f %") % (lambda x: x/self._cash)(global_result))
+        
+        self.label_output_mean_streak.setText(str("%.2f") % self._result_mean_lost_bets_in_row)
+        
         print("DiceSimulator: On sort du SLOT update_result_data")
 
     def check_inputs(self):
