@@ -212,8 +212,18 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
         print("DiceSimulator : create_dice_list OUT")
         return dices
     
-    def compute_win_lost_list(self, dice_list):
-        return []
+    def compute_win_lost_list(self, dices):
+        """
+        Cette méthode lit la liste des dés simulés pour en déduire si les paris sont gagnés ou perdu, en se basant sur
+        les paramètres d'entrée (_event_probability notamment).
+        :param dices: liste des dés simulés
+        :return: la liste des évènements gagnés ou perdus: des booléens
+        """
+        
+        print("DiceSimulator : compute_win_lost_list IN")
+        events = dices >= 10000 * self._event_probability
+        print("DiceSimulator : compute_win_lost_list OUT")
+        return events
     
     def calculate_mean_lost_in_row(self, dice_list):
         pass
