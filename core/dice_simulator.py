@@ -248,4 +248,38 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
         print("DiceSimulator: calculate_mean_lost_in_row OUT")
         
     def compute_strategy(self, events):
-        pass
+        """
+        Cette méthode implémente exactement le style de jeu que j'adopte pour évaluer la performance la stratégie
+        proposée via les paramètres d'entrée saisis au préalable.
+        :param events: liste des évènements (paris) réussis ou manqués.
+        :return: rien: les résultats sont stockés dans les attributs de la classe.
+        """
+        
+        print("DiceSimulator: compute_strategy IN")
+        bet_i = 0
+        result = []
+        
+        for i in range(self._number_simulation):
+            
+            [cash, n_dice_simulated] = self.simulate_strategy_once(events, bet_i)
+            bet_i += n_dice_simulated
+            
+            if cash > self._cash:
+                self._result_global_win += cash - self._cash
+            else:
+                self._result_failed_method += 1
+                self._result_global_loss += self._cash - cash
+            result.append(cash - self._cash)
+        print("DiceSimulator: compute_strategy OUT")
+
+    def simulate_strategy_once(self, events, bet_i):
+        """
+        Cette méthode simule la stratégie conformément aux données entrées et au style de jeu.
+        :param events: Liste des évènements réussis et manqués
+        :param bet_i: indice pour la lecture de la liste des évènements
+        :return: une liste contenant deux valeurs: la trésorerie à la fin de la stratégie et le nombre de dés simulés.
+        """
+        
+        print("DiceSimulator: simulate_strategy_once IN")
+        print("DiceSimulator: simulate_strategy_once OUT")
+        return [0, self._wished_dices]
