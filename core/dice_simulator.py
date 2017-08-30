@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import QWidget, QMessageBox
 from PyQt5.QtCore import pyqtSlot
 
+import numpy as np
+
 from gen_files import ui_dice_simulator
 from . import gambling
 
@@ -199,7 +201,16 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
         return test
 
     def create_dice_list(self):
-        return []
+        """
+        Cette méthode crée une liste contenant les N tirages correspondant au test de la stratégie que l'on met en place.
+        N dépend du nombre de simulation et du nombre de dés par simulations (produit des deux).
+        :return: une liste contenant les valeurs des dés N simulés.
+        """
+        
+        print("DiceSimulator : create_dice_list IN")
+        dices = np.random.randint(0, 10000, int(self._number_simulation * self._wished_dices * 1.1))
+        print("DiceSimulator : create_dice_list OUT")
+        return dices
     
     def compute_win_lost_list(self, dice_list):
         return []
