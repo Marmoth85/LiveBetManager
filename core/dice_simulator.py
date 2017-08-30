@@ -11,7 +11,7 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
     
     def __init__(self, parent=None):
         
-        print("DiceSimulator : On entre dans le constructeur")
+        print("DiceSimulator: On entre dans le constructeur")
         super(DiceSimulator, self).__init__(parent)
         self.setupUi(self)
 
@@ -25,7 +25,7 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
         
         self.currency_changed("Bitcoin")
         self.precision_changed()
-        print("DiceSimulator : On sort du le constructeur")
+        print("DiceSimulator: On sort du le constructeur")
     
     @pyqtSlot('QString')
     def currency_changed(self, string):
@@ -221,12 +221,31 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
         """
         
         print("DiceSimulator : compute_win_lost_list IN")
-        events = dices >= 10000 * self._event_probability
+        events = dices < 10000 * self._event_probability
         print("DiceSimulator : compute_win_lost_list OUT")
         return events
     
-    def calculate_mean_lost_in_row(self, dice_list):
-        pass
-    
-    def compute_strategy(self, dice_list):
+    def calculate_mean_lost_in_row(self, events):
+        """
+        Cette méthode calcul le nombre moyen de paris perdus consécutifs précédent un pari gagnant.
+        :param events: liste des paris gagnés ou perdus
+        :return: veleur du nombre de coups moyens pour avoir un coup gagnant dans un attribut de classe.
+        """
+        
+        print("DiceSimulator: calculate_mean_lost_in_row IN")
+        numbers_win = 0
+        cumsum_win = 0
+        in_row = 0
+        
+        for bet_i in range(len(events)):
+            if not events[bet_i]:
+                in_row += 1
+            else:
+                numbers_win += 1
+                cumsum_win += in_row
+                in_row = 0
+        self._result_mean_lost_bets_in_row = cumsum_win / numbers_win
+        print("DiceSimulator: calculate_mean_lost_in_row OUT")
+        
+    def compute_strategy(self, events):
         pass
