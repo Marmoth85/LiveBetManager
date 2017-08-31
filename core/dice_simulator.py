@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QWidget, QMessageBox
 from PyQt5.QtCore import pyqtSlot
 
 import numpy as np
+from math import log
 
 from gen_files import ui_dice_simulator
 from . import gambling
@@ -208,7 +209,11 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
         """
         
         print("DiceSimulator : create_dice_list IN")
-        dices = np.random.randint(0, 10000, int(self._number_simulation * self._wished_dices * 1.1))
+        smallest_bet = 0.00000001
+        n_streak = - 1 + int(log(1 + self._cash / smallest_bet * (self._increase_decrease_on_loss - 1)) /
+                             log(self._increase_decrease_on_loss))
+        #print("N_STREAK = %i" % n_streak)
+        dices = np.random.randint(0, 10000, int(self._number_simulation * (self._wished_dices + n_streak + 1)))
         print("DiceSimulator : create_dice_list OUT")
         return dices
     
@@ -295,13 +300,18 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
         
         for i in range(self._wished_dices):
             [cash, bet, number_bet, ok] = self.simulate_bet(cash, bet, events, bet_i, i, number_bet, ok)
+            #print(str("%3i, %.8f, %.8f, %s") % (number_bet, cash, bet, ok))
             
             if not ok:
                 break
-                
-        if ok and not events[bet_i + number_bet]:
-            while not events[bet_i + number_bet] and ok:
-                [cash, bet, number_bet, ok] = self.simulate_bet(cash, bet, events, bet_i, 0, number_bet, ok)
+        #print(events[bet_i:bet_i+number_bet])
+        if ok and not events[bet_i + number_bet - 1]:
+            i = number_bet
+            while not events[bet_i + number_bet - 1] and ok:
+                [cash, bet, number_bet, ok] = self.simulate_bet(cash, bet, events, bet_i, i, number_bet, ok)
+                #print(str("%3i, %.8f, %.8f, %s") % (number_bet, cash, bet, ok))
+                i += 1
+            #print(events[bet_i:bet_i + number_bet])
                 
         #print("DiceSimulator: simulate_strategy_once OUT")
         return [cash, number_bet]
