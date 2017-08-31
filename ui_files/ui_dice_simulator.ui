@@ -709,7 +709,7 @@
    <item row="23" column="2">
     <widget class="QLabel" name="label_relative_deficits">
      <property name="text">
-      <string>Pertes relatives moyennes par réussite :</string>
+      <string>Pertes relatives moyennes par échec :</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

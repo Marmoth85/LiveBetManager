@@ -276,7 +276,7 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
                 self._result_global_loss += self._cash - cash
             result.append(cash - self._cash)
         print("DiceSimulator: compute_strategy OUT")
-        print(result)
+        # print(result)
 
     def simulate_strategy_once(self, events, bet_i):
         """
@@ -294,16 +294,14 @@ class DiceSimulator(QWidget, gambling.Gambling, ui_dice_simulator.Ui_DiceSimulat
         ok = True
         
         for i in range(self._wished_dices):
-            #print([cash, bet, number_bet, ok])
             [cash, bet, number_bet, ok] = self.simulate_bet(cash, bet, events, bet_i, i, number_bet, ok)
-            #print([cash, bet, number_bet, ok])
             
             if not ok:
                 break
-                    
-        """if ok and not events[bet_i + number_bet - 1]:
-            while not events[bet_i + number_bet - 1]:
-                number_bet += 1"""
+                
+        if ok and not events[bet_i + number_bet]:
+            while not events[bet_i + number_bet] and ok:
+                [cash, bet, number_bet, ok] = self.simulate_bet(cash, bet, events, bet_i, 0, number_bet, ok)
                 
         #print("DiceSimulator: simulate_strategy_once OUT")
         return [cash, number_bet]
